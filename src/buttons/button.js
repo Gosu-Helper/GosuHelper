@@ -87,7 +87,6 @@ async function initButtons(main, dirComponent){
                         let slicedActionRow = actionRow.slice(-1)[0]
                         let position = obj[args[2]].findIndex((row) => {return row.name === slicedActionRow.name})
                         position = position < 0 ? obj[args[2]].length - 1 : position
-                        console.log("position -")
                         if(obj[args[2]][position].components.length < 5){
                             obj[args[2]][position].components.push({button: dirComponent[key].buttonData, position: buttonPosition})
                         } else {
