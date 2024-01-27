@@ -9,7 +9,6 @@ const dirLevelButtonComponent = requireDir('./levelButtonComponent')
 const dirCommand = requireDir('./buttonCommandList')
 let buttonCommandList = {}
 let buttonGroups = {}
-let actionRow = {}
 let levels = {}
 let cdCache = {}
 
@@ -73,7 +72,6 @@ class Button {
 }
 
 async function initButtons(main, dirComponent){
-    const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
     let obj = {}
 
     for(let key in dirComponent){

@@ -28,6 +28,7 @@ async function level5(p, Target, user, embed){
     if(await check(p, "497843968151781378", Target, user)){
         let worker = await p.fetchRole("497912748357713962")
         let noble = await p.fetchRole("497910079849496588")
+        let removedRoles = []
         if(user.roles.cache.has("497910079849496588") && p.interaction.customId == "worker"){
             let nobleRoles = ["497910079849496588", "497497794622390272", "497579388917776404", "497590234435813377", "497582147511517204", "497593990498222080", "497594302818418689"]
             nobleRoles.forEach(async (role) => {
@@ -36,7 +37,6 @@ async function level5(p, Target, user, embed){
             })
             user.roles.add(worker)
             embed.setDescription("Removed all the roles pertaining to the Noble class. \nWelcome to the Worker class!").setColor("SUCCESS")
-            p.interaction.reply({embeds: [embed], ephemeral: true})
         }
         else if(user.roles.cache.has("497912748357713962") && p.interaction.customId == "noble"){
             let workerRoles = ["497912748357713962", "497491973742133258", "497491650159968259", "497580312486871040", "497582122924507166", "497591253144436736", "497582173612670976"]
@@ -46,19 +46,21 @@ async function level5(p, Target, user, embed){
             })
             user.roles.add(noble)
             embed.setDescription("Removed all the roles pertaining to the Worker class. \nWelcome to the Noble class!").setColor("SUCCESS")
-            p.interaction.reply({embeds: [embed], ephemeral: true})
         }
         else if(p.interaction.customId == "worker" && !user.roles.cache.has(worker.id)){
             user.roles.add(worker)
-            p.interaction.reply({embeds: [embed.setDescription("Welcome to the Worker class!").setColor("SUCCESS")], ephemeral: true})
+            embed.setDescription("Welcome to the Worker class!").setColor("SUCCESS")
         } else if(p.interaction.customId == "noble" && !user.roles.cache.has(noble.id)){
             user.roles.add(noble)
-            p.interaction.reply({embeds: [embed.setDescription("Welcome to the Noble class!").setColor("SUCCESS")], ephemeral: true})
+            embed.setDescription("Welcome to the Noble class!").setColor("SUCCESS")
         } else {
             let role = user.roles.cache.has("497912748357713962") ? "Worker" : user.roles.cache.has("497910079849496588") ? "Noble" : "???"
-            p.interaction.reply({embeds: [embed.setDescription(`You are already in the ${role} class!`).setColor("ERROR")], ephemeral: true})
+            if(user.roles.cache.has(noble.id)) user.roles.remove(noble)
+            else if(user.roles.cache.has(worker.id)) user.roles.remove(worker)
+            embed.setDescription(`You quit the ${role} class.`).setColor("SUCCESS")
         }
     } else return p.interaction.reply({content: "Requires Level 5 role. Chat more to gain experience!", ephemeral: true})
+    return p.interaction.reply({embeds: [embed], ephemeral: true})
 }
 
 async function level15(p, Target, user, embed){
