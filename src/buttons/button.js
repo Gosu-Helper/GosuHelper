@@ -73,6 +73,7 @@ class Button {
 }
 
 async function initButtons(main, dirComponent){
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
     let obj = {}
 
     for(let key in dirComponent){
@@ -136,6 +137,7 @@ async function initButtons(main, dirComponent){
             }
         }
     }
+    let checked = {}
     for(let msg in obj){
         obj[msg].sort(((p, c) => p.position - c.position))
         let toBeSent = []
@@ -155,9 +157,11 @@ async function initButtons(main, dirComponent){
                         address = dirComponent[key].address[address].split("/")
                         let guild = await main.client.guilds.fetch(address[0])
                         let channel = await guild.channels.fetch(address[1])
-                        let message = await channel.messages.fetch(msg)
-                        //console.log(message.components)
-                        message.edit({components: toBeSent})
+                        if(address[2]==msg && !checked[msg]){
+                            let message = await channel.messages.fetch(msg)
+                            checked[msg] = true
+                            message.edit({components: toBeSent})
+                        }
                     } catch(err){
                         console.log(err)
                     }
@@ -180,7 +184,6 @@ async function initButtons(main, dirComponent){
             }
         }
     }*/
-    obj = {}
 }
 
 async function initButtonCommands(){
