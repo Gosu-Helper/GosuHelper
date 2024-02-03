@@ -7,6 +7,6 @@ module.exports = {
         position: 1
     },
     position: 4,
-    buttonData: new ButtonBuilder().setLabel('Head Scholar').setStyle(1).setCustomId('head-scholar')
+    buttonData: new ButtonBuilder().setLabel('Head Scholar').setStyle(2).setCustomId('head-scholar')
 }
 /*'493164609591574528/1196628188403597495/1199851366936481802',*/

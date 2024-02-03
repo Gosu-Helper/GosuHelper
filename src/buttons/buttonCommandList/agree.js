@@ -7,16 +7,29 @@ module.exports = new ButtonInterface({
     group: [],
     execute: async function(p){
 
+        let error = new p.embed().setDescription("Unable to verify you.").setColor("ERROR")
+
+        let success = new p.embed().setDescription("Successfully verified.").setColor("SUCCESS")
+        
         let Target = await p.fetchUser(p.client.user.id) //Fetch client from guild
 
         let user = await p.fetchUser(p.interaction.user.id)
 
-        let role = await p.fetchRole('748956236799672381')
+        let agree_to_rules = await p.fetchRole('823535883054743644')
 
-        if(Target.roles.highest.position < role.position) return p.interaction.reply({ content: "Unable to give verify you.", ephemeral: true })
+        let friend = await p.fetchRole('496717793388134410')
 
-        user.roles.add(role)
-        if(user.roles.cache.has(role.id)) return p.interaction.reply({ content: "Succesfully Verified.", ephemeral: true })
-        else return p.interaction.reply({ content: "Unable to verify you.", ephemeral: true })
+        
+        try {
+            if(Target.roles.highest.position < friend.position || Target.roles.highest.position < agree_to_rules.position) return p.interaction.reply({ embeds: [error], ephemeral: true })
+            user.roles.remove(agree_to_rules)
+            user.roles.add(friend)
+        } catch(err){
+            console.log(err)
+            return p.interaction.reply({ embeds: [error], ephemeral: true})
+        }
+
+        if(user.roles.cache.has(friend.id)) return p.interaction.reply({ embeds: [success], ephemeral: true })
+        else return p.interaction.reply({ embeds: [error], ephemeral: true })
     }
 })

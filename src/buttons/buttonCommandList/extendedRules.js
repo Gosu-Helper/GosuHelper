@@ -41,13 +41,13 @@ module.exports = new ButtonInterface({
                 name: "Rule 10 - Alternate accounts are not allowed",
                 value: "Alternate accounts on this server to avoid punishment/break rules/grief server/raid etc will result a kick/ban in all accounts owned."
             }, {
-                name: "Rule 11 - Exploitation",
+                name: "Rule 11 - No Exploitation",
                 value: "Exploitation of any form such as hacking/sharing bugs/viruses etc for things such as games/accounts/auto moderation/rules/organism etc will result in kick/ban."
             }, {
-                name: "Rule 12 - Profiles, Banners, Avatars and About Me",
+                name: "Rule 12 - No Inappropriate Profiles, Banners, Avatars and About Me",
                 value: "All profiles, banners, avatars, and about me must follow all given rules listed above and below. This means no obscene/political/racial/sexual stuff on display. As well as promoting links and any others that are deemed unsafe is prohibited. This will result in a permanent mute or kick/ban."
             }, {
-                name: "Rule 13 - Drama and Arguments",
+                name: "Rule 13 - No Drama and Arguments",
                 value: "Keep dramas, arguments and any other type of controversial topics out of the server. This may result in a mute/kick/ban."
             }, {
                 name: "Rule 14 - Cursed, ear rape and epilepsy content/posts are not allowed",

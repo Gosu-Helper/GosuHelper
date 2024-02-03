@@ -96,7 +96,7 @@ module.exports = class ButtonBuilder{
             if(!this.data.custom_id) this.data.custom_id = 'default'
         }
 
-        if(!this.data.label && (!this.data.emoji?.name || !this.data.emoji?.id)) this.data.label = 'Button'
+        if(!this.data.label && (!this.data.emoji?.name && !this.data.emoji?.id)) this.data.label = 'Button'
 
         this.data.type = 2
 

@@ -7,6 +7,6 @@ module.exports = {
         position: 0
     },
     position: 0,
-    buttonData: new ButtonBuilder().setLabel('Landowner').setStyle(1).setCustomId('landowner')
+    buttonData: new ButtonBuilder().setLabel('Landowner').setStyle(2).setCustomId('landowner')
 }
 /*'493164609591574528/1196628188403597495/1199872661799575552',*/

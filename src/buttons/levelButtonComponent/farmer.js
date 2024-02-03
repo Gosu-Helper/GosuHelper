@@ -7,6 +7,6 @@ module.exports = {
         position: 0
     },
     position: 0,
-    buttonData: new ButtonBuilder().setLabel('Farmer').setStyle(1).setCustomId('farmer')
+    buttonData: new ButtonBuilder().setLabel('Farmer').setStyle(2).setCustomId('farmer')
 }
 /*'493164609591574528/1196628188403597495/1199841149460959333',*/

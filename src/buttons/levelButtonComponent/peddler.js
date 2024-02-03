@@ -7,6 +7,6 @@ module.exports = {
         position: 0
     },
     position: 1,
-    buttonData: new ButtonBuilder().setLabel('Peddler').setStyle(1).setCustomId('peddler')
+    buttonData: new ButtonBuilder().setLabel('Peddler').setStyle(2).setCustomId('peddler')
 }
 /*'493164609591574528/1196628188403597495/1199841149460959333',*/

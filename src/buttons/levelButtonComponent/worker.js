@@ -6,6 +6,6 @@ module.exports = {
         name: "Level5",
     },
     position: 0,
-    buttonData: new ButtonBuilder().setLabel('Worker').setStyle(1).setCustomId('worker')
+    buttonData: new ButtonBuilder().setLabel('Worker').setStyle(2).setCustomId('worker')
 }
 /*'493164609591574528/1196628188403597495/1199837839744049183',*/ 

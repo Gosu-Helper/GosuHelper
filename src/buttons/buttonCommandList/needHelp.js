@@ -7,6 +7,6 @@ module.exports = new ButtonInterface({
     cd: 900000,
     group: [],
     execute: async function(p){
-        p.interaction.reply(`<@!${p.interaction.user.id}> needs help! <@&505109943070752780>`)
+        p.interaction.reply(`<@!${p.interaction.user.id}> needs help! <@&495727371140202506>`)
     }
 })

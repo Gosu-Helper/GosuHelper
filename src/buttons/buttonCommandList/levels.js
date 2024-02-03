@@ -1,5 +1,4 @@
 const ButtonInterface = require('../buttonInterface')
-const scholar = require('../levelButtonComponent/scholar')
 const lvl5 = ['worker', 'noble']
 const lvl15 = ['farmer', 'peddler', 'soldier', 'scholar']
 const lvl30 = ['head-farmer', 'head-merchant', 'colonel', 'head-scholar']
@@ -13,7 +12,6 @@ module.exports = new ButtonInterface({
     execute: async function(p){
         let embed = new p.embed()
         let Target = await p.fetchUser(p.client.user.id) //Fetch client from guild
-
         let user = await p.fetchUser(p.interaction.user.id)
 
         if(lvl5.includes(p.interaction.customId)) await level5(p, Target, user, embed)
@@ -28,7 +26,7 @@ async function level5(p, Target, user, embed){
     if(await check(p, "497843968151781378", Target, user)){
         let worker = await p.fetchRole("497912748357713962")
         let noble = await p.fetchRole("497910079849496588")
-        let removedRoles = []
+        //let removedRoles = []
         if(user.roles.cache.has("497910079849496588") && p.interaction.customId == "worker"){
             let nobleRoles = ["497910079849496588", "497497794622390272", "497579388917776404", "497590234435813377", "497582147511517204", "497593990498222080", "497594302818418689"]
             nobleRoles.forEach(async (role) => {

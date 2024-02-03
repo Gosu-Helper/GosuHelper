@@ -6,6 +6,7 @@ const Embed = require('../utils/embed')
 const { PermissionsBitField } = require('discord.js');
 const dirButtonComponent = requireDir('./buttonComponent')
 const dirLevelButtonComponent = requireDir('./levelButtonComponent')
+const dirRoleButtonComponent = requireDir('./roleButtonComponent')
 const dirCommand = requireDir('./buttonCommandList')
 let buttonCommandList = {}
 let buttonGroups = {}
@@ -18,6 +19,7 @@ class Button {
         this.main = main
         initButtons(main, dirButtonComponent)
         initButtons(main, dirLevelButtonComponent)
+        initButtons(main, dirRoleButtonComponent)
         initButtonCommands()
         initLevels()
         this.prefix = main.prefix
@@ -66,7 +68,7 @@ class Button {
             if(perms.missing.includes('Send Messages')) return
             return param.interaction.reply( {content: `The bot is missing **${perms.missing.join(", ")}** permissions.`, ephemeral: true})
         }
-        
+
         await executeCommand(param);
     }
 }
@@ -245,6 +247,7 @@ function initLevels(){
 
 async function executeCommand(p){
     await buttonCommandList[p.command].execute(p)
+    if(['red', 'orange', 'yellow', 'green', 'blue', 'purple'].includes(p.command)) p.command = 'red'
     if(!cdCache[p.interaction.user.id+p.command]){
         let cooldown = 2500
         if(buttonCommandList[p.command]["cd"]) cooldown = buttonCommandList[p.command].cd
@@ -392,6 +395,7 @@ async function checkGosu(p){
 }
 
 async function checkCd(p){
+    if(['red', 'orange', 'yellow', 'green', 'blue', 'purple'].includes(p.command)) p.command = 'red'
     if(cdCache[p.interaction.user.id+p.command]){
         return cdCache[p.interaction.user.id+p.command]
     } else return false

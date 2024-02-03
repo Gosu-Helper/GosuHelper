@@ -7,6 +7,6 @@ module.exports = {
         position: 1
     },
     position: 0,
-    buttonData: new ButtonBuilder().setLabel('Commander').setStyle(1).setCustomId('commander')
+    buttonData: new ButtonBuilder().setLabel('Commander').setStyle(2).setCustomId('commander')
 }
 /*'493164609591574528/1196628188403597495/1199872661799575552',*/
