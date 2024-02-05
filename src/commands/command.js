@@ -3,6 +3,10 @@ const CommandInterface = require('./commandInterface')
 const dir = requireDir('./commandList', {recurse: true})
 const Embed = require('../utils/embed')
 const { PermissionsBitField } = require('discord.js')
+const ButtonBuilder = require('../buttonUtils/ButtonBuilder')
+const ActionRowBuilder = require('../buttonUtils/ActionRowBuilder')
+const permissions = require('../data/permissions')
+const Permissions = permissions.Permissions
 let commandList = {}
 let commandGroups = {}
 let levels = {}
@@ -148,6 +152,9 @@ function initParam(msg, command, args, level, main){
         "reply":main.sender.reply(msg),
         "errorMsg":main.sender.errorMsg(msg),
         "embed": Embed,
+        "button": ButtonBuilder,
+        "actionrow": ActionRowBuilder,
+        "Permissions": Permissions,
         "main": main,
 		"client":main.client,
 		"commands":commandList,
@@ -234,11 +241,11 @@ async function checkPerms(main, p){
     let missing = []
     let Target = await p.msg.guild.members.fetch(main.client.user.id)
 
-    if(Target.permissions.has(PermissionsBitField.Flags.Administrator)) return {perms: true}
-    else if(!p.msg.channel.permissionsFor(Target).has(PermissionsBitField.Flags.SendMessages)) missing.push('Send Messages')
+    if(Target.permissions.has(Permissions.Administrator)) return {perms: true}
+    else if(!p.msg.channel.permissionsFor(Target).has(Permissions.SendMessages)) missing.push('Send Messages')
     else{
         for(let perm in commandList[p.command].permissions){
-            if(!p.msg.channel.permissionsFor(Target).has(commandList[p.command].permissions[perm])){
+            if(!p.msg.channel.permissionsFor(Target).has(Permissions[commandList[p.command].permissions[perm]])){
                 missing.push(fixPerms(false, commandList[p.command].permissions[perm]))
             }
         }
@@ -255,12 +262,13 @@ async function checkPerms(main, p){
 }
 
 function fixPerm(perms){
-    if(perms == 'MANAGE_GUILD'){
-    perms = 'MANAGE_SERVER'
+    if(perms == Permissions.ManageGuild){
+        perms = 'MANAGE_SERVER'
     }
-    if(perms == 'MODERATE_MEMBERS'){
+    if(perms == Permissions.ModerateMembers){
         perms = 'TIMEOUT_MEMBERS'
     }
+    //console.log(perms)
     let words = perms.split("_")
     let combined = []
     for(let j of words){
@@ -276,10 +284,12 @@ function fixPerm(perms){
  * @returns {Array}
  */
 function fixPerms(filter,...perms){
-    let include = ['ADMINISTRATOR','MANAGE_GUILD','MANAGE_ROLES','MANAGE_CHANNELS','MANAGE_MESSAGES','MANAGE_WEBHOOKS','MANAGE_NICKNAMES','MANAGE_EMOJIS_AND_STICKERS','KICK_MEMBERS','BAN_MEMBERS','MODERATE_MEMBERS','MANAGE_EVENTS','MANAGE_THREADS']//['START_EMBEDDED_ACTIVITIES', 'SEND_MESSAGES_IN_THREADS', 'CREATE_PRIVATE_THREADS', 'CREATE_PUBLIC_THREADS', 'REQUEST_TO_SPEAK', 'USE_VAD', 'CONNECT', 'SPEAK', 'PRIORITY_SPEAKER', 'STREAM', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES', 'READ_MESSAGE_HISTORY',]
+    let include = ["Administrator", "ManageGuild","ManageRoles","ManageChannels","ManageMessages","ManageWebhooks","ManageNicknames","ManageGuildExpressions","KickMembers","BanMembers","ModerateMembers","ManageEvents","ManageThreads",Permissions.Administrator,Permissions.ManageGuild,Permissions.ManageRoles,Permissions.ManageChannels,Permissions.ManageMessages,Permissions.ManageWebhooks,Permissions.ManageNicknames,Permissions.ManageGuildExpressions,Permissions.KickMembers,Permissions.BanMembers,Permissions.ModerateMembers,Permissions.ManageEvents,Permissions.ManageThreads]//['START_EMBEDDED_ACTIVITIES', 'SEND_MESSAGES_IN_THREADS', 'CREATE_PRIVATE_THREADS', 'CREATE_PUBLIC_THREADS', 'REQUEST_TO_SPEAK', 'USE_VAD', 'CONNECT', 'SPEAK', 'PRIORITY_SPEAKER', 'STREAM', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES', 'READ_MESSAGE_HISTORY',]
     if(filter === true) perms = perms.flat(2).filter((perm) => include.includes(perm))
     else if(Array.isArray(filter)) perms = perms.flat(2).filter((perm) => filter.includes(perm))
-
+    //new perm().log()
+    //console.log(perms.flat(2))
+    //perms = Object.fromEntries(Object.entries(permissions).filter(([permission, bit]) => perms.include(bit)))//.filter((perm) => Object.values(permissions).filter((permission) => perms.flat(2).includes(permission))//.map(perm => fixPerm(perm))
     if(perms.length>0){
         perms = perms.flat(2).map(perm => fixPerm(perm))
         return perms

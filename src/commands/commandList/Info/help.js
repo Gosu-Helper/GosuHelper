@@ -11,7 +11,7 @@ module.exports = new CommandInterface({
     execute: async function(p){
         let help = new p.embed({description: "Hi"}).setColor('heart2')
         //No args send all commands
-        if(p.args.length < 1) p.send(display(p, help, 0).check(p.msg))
+        if(p.args.length < 1) p.send(display(p, help, 0)/*.check(p.msg)*/)
         else if(p.commands[p.args[0]]?.group[0] == "Role" && !(["493164609591574528","495716062097309697","491747726208270338"].includes(p.msg.guildId))) return
         else if(p.commands[p.args[0]]){//If help for a specific command exists
             p.send(display(p, help, 1))

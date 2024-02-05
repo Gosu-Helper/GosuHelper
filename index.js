@@ -34,8 +34,6 @@ client.on('ready', (c) => {
 })
 
 client.login(process.env.TOKEN)*/
-const ButtonBuilder = require('./src/buttonUtils/ButtonBuilder')
-const ActionRowBuilder = require('./src/buttonUtils/ActionRowBuilder')
 const Discord = require('discord.js')
 const Base = require('./src/Base')
 class GosuHelper extends Base{
@@ -45,8 +43,6 @@ class GosuHelper extends Base{
         this.prefix = this.config.prefix
         this.mongo = require('./src/utils/mongo')
         this.sender = require('./src/utils/sender')
-        this.button = ButtonBuilder
-        this.actionrow = ActionRowBuilder
         //console.log(require('./src/buttons/Buttons/ping'))
         //this.data = require('./data')
         //findChannel(this.client)
