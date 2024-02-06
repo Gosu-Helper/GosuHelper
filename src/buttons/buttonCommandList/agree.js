@@ -23,13 +23,13 @@ module.exports = new ButtonInterface({
         try {
             if(Target.roles.highest.position < friend.position || Target.roles.highest.position < agree_to_rules.position) return p.interaction.reply({ embeds: [error], ephemeral: true })
             user.roles.remove(agree_to_rules)
-            user.roles.add(friend)
+            user.roles.add(friend).then((user) => {
+                if(user.roles.cache.has(friend.id)) return p.interaction.reply({ embeds: [success], ephemeral: true })
+                else return p.interaction.reply({ embeds: [error], ephemeral: true })
+            })
         } catch(err){
             console.log(err)
             return p.interaction.reply({ embeds: [error], ephemeral: true})
         }
-
-        if(user.roles.cache.has(friend.id)) return p.interaction.reply({ embeds: [success], ephemeral: true })
-        else return p.interaction.reply({ embeds: [error], ephemeral: true })
     }
 })
