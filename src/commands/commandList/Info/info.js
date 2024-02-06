@@ -34,7 +34,9 @@ module.exports = new CommandInterface({
             {name: 'Servers', value: `${guilds.size}`, inline: true},
             {name: 'Users', value: `${userCount}`, inline: true},
             {name: `Joined`, value: `${DateTime.fromISO(clientJoinedAt).toLocaleString(DateTime.DATETIME_SHORT)}`, inline: true}
-        ).setColor("820300")//.check(p.msg, true)
+        )
+        .setFooter({text: "All rights reserved to ⓒ 2024. Gosu General TV Inc.", iconURL: (await p.client.guilds.fetch("495716062097309697")).iconURL()})
+        .setColor("820300")//.check(p.msg, true)
 
         p.send(info)
     }

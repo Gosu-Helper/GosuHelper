@@ -48,7 +48,7 @@ module.exports = new CommandInterface({
 
             if(roleData.disallowedRoles.includes(role.id) || role.managed){
                 continue
-            } else if(role.name.toLowerCase().includes("muted") || (similar?.length > 0 && !roleData.allowedRoles.includes(role.id))){
+            } else if(role.name.toLowerCase().includes("muted") || (similar?.length > 0 && !roleData.disallowedRoles.includes(role.id))){
                 const response = await p.awaitReply(`Are you sure you want to add **${role.name}** into their saved roles? y/n\n__${p.fixPerms(keyPerms, role.permissions.toArray()).join(", ")}__`);
                 // If they respond with y or yes, continue.
                 if(["y", "yes"].includes(response)) {

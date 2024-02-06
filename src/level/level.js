@@ -1,0 +1,183 @@
+module.exports = class Level{
+    constructor(p, msg){
+        this.p = p
+        this.msg = msg
+        this.user = msg?.author || p?.msg?.author
+    }
+
+    async currentUserLevel(p, user){
+        let data = await p.mongo.queryOne("level", `${user.id || this.user?.id}`)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) data = await p.mongo.createOne("level", { _id: user.id, level: 0, exp: 0, lastSent: 0/*msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp*/})
+        return data.level
+    }
+
+    async currentUserExp(p, user){
+        let data = await p.mongo.queryOne("level", `${user.id || this.user?.id}`)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) data = await p.mongo.createOne("level", { _id: user.id, level: 0, exp: 0, lastSent: 0})
+        return data.exp
+    }
+
+    async nextLevel(p, user){
+        let data = await p.mongo.queryOne("level", `${user.id || this.user?.id}`)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) data = await p.mongo.createOne("level", { _id: user.id, level: 0, exp: 0, lastSent: 0})
+        return data.level+1
+    }
+
+    async currentLevelExp(p, user){
+        let data = await p.mongo.queryOne("level", `${user.id || this.user?.id}`)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) data = await p.mongo.createOne("level", { _id: user.id, level: 0, exp: 0, lastSent: 0})
+        return ( (5*(data.level*data.level)) + (50*data.level) + 100 )
+    }
+
+    async nextLevelExp(p, user){
+        let data = await p.mongo.queryOne("level", `${user.id || this.user?.id}`)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) data = await p.mongo.createOne("level", { _id: user.id, level: 0, exp: 0, lastSent: 0})
+        return ( (5*((data.level+1)*(data.level+1))) + (50*(data.level+1)) + 100 )
+    }
+
+    async expDifference(p, msg){
+        let data = await p.mongo.queryOne("level", `${msg.author.id || this.user?.id}`)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) data = await p.mongo.createOne("level", { _id: msg.author.id, level: 0, exp: 0, lastSent: msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp})
+        const currentUserExp = await this.currentUserExp(p, data._id)
+        const currentLevelExp = await this.currentLevelExp(p, data._id)
+        let expDifference = currentLevelExp-currentUserExp
+        const nextLevel = expDifference <= 0 ? true : false
+        expDifference = expDifference < 0 ? -expDifference : expDifference
+
+        return {nextLevel, expDifference, data}
+    }
+
+    async addExperience(p, msg, levelup=true){
+        let data = await p.mongo.queryOne("level", `${msg.author.id || this.user?.id}`)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) data = await p.mongo.createOne("level", { _id: msg.author.id, level: 0, exp: 0, lastSent: msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp})
+
+        if(((msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp)-data.lastSent) > 5000){
+            let exp = Math.floor(Math.random() * (25-15+1) + 15)
+            //console.log(exp)
+            data.exp += exp
+            data.lastSent = msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp
+        }
+        await data.save()
+
+        const currentUserExp = await this.currentUserExp(p, data._id)
+        const currentLevelExp = await this.currentLevelExp(p, data._id)
+        let expDifference = currentLevelExp-currentUserExp
+        const nextLevel = expDifference <= 0 ? true : false
+        expDifference = expDifference < 0 ? -expDifference : expDifference
+
+        if(levelup&&nextLevel) levelup = await this.addLevel(p, msg)
+
+        return {nextLevel, expDifference, data, leveledUp: levelup.nextLevel}
+    }
+
+    async addLevel(p, msg){
+        let data = await p.mongo.queryOne("level", `${msg.author.id || this.user?.id}`)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) data = await p.mongo.createOne("level", { _id: msg.author.id, level: 0, exp: 0, lastSent: msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp})
+
+        const currentUserExp = await this.currentUserExp(p, data._id)
+        const currentLevelExp = await this.currentLevelExp(p, data._id)
+        let expDifference = currentLevelExp-currentUserExp
+        const nextLevel = expDifference <= 0 ? true : false
+        expDifference = expDifference < 0 ? -expDifference : expDifference
+
+        if(nextLevel){
+            data.level += 1
+            data.exp = expDifference
+        }
+        
+        await data.save()
+
+        return {nextLevel, expDifference, data}
+    }
+
+    async forceAddLevel(p, user, level=1, keep=true){
+        let data = await p.mongo.queryOne("level", user.id)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) return false
+
+        if(!keep){
+            data.level += level
+            data.exp = 0
+        } else data.level += level
+
+        await data.save()
+        return data
+    }
+
+    async forceAddExp(p, user, exp=0){
+        let data = await p.mongo.queryOne("level", user.id)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) return false
+
+        data.exp += exp
+        
+        await data.save()
+        return data
+    }
+
+    async checkLevelUp(p, msg){
+        let data = await p.mongo.queryOne("level", `${msg.author.id || this.user?.id || p.msg.author.id}`)
+        //If no data or data exists and doesn't include roleID add to saved roles
+        if(!data) data = await p.mongo.createOne("level", { _id: msg.author.id, level: 0, exp: 0, lastSent: msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp})
+
+        const currentUserExp = await this.currentUserExp(p, data._id)
+        const currentLevelExp = await this.currentLevelExp(p, data._id)
+        let expDifference = currentLevelExp-currentUserExp
+        const nextLevel = expDifference <= 0 ? true : false
+        expDifference = expDifference < 0 ? -expDifference : expDifference
+
+        return {nextLevel, expDifference, data}
+    }
+
+    async rewards(p, level){
+        let Target = await p.fetchUser(p.client.user.id) //Fetch client from guild
+        let user = await p.fetchUser(p.msg.author.id) //Fetch author from guild
+
+        let reward = {
+            "5": {
+                lvl: await p.fetchRole("497843968151781378"),
+                color: await p.fetchRole("813473502312398918"),
+                nick: await p.fetchRole("874995842111668244")
+            },
+            "15": {
+                lvl: await p.fetchRole("497491254838427674"),
+                color: await p.fetchRole("813473535145934908"),
+                attachments: await p.fetchRole("813420379410399303")
+            },
+            "30": {
+                lvl: await p.fetchRole("497578834376392724"),
+                color: await p.fetchRole("813473575440220181")
+            },
+            "50": {
+                lvl: await p.fetchRole("523184440491638795"),
+                color: await p.fetchRole("813473599226511360")
+            },
+            "70": {
+                lvl: await p.fetchRole("542051690195451907"),
+                color: await p.fetchRole("820334912690192435")
+            }
+        }
+
+        if(reward[level]){
+            if(Target.roles.highest.position < reward[level].lvl.position || Target.roles.highest.position < reward[level].color.position || !p.msg.channel.permissionsFor(Target).has(p.Permissions.ManageRoles)) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
+            user.roles.add(reward[level].lvl)
+            user.roles.add(reward[level].color)
+            if(level=="5"){
+                if(Target.roles.highest.position < reward[level].nick.position) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
+                else user.roles.add(reward[level].nick)
+            }
+            else if(level=="15"){
+                if(Target.roles.highest.position < reward[level].attachments.position) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
+                user.roles.add(reward[level].attachments)
+            }
+        }
+    }
+}

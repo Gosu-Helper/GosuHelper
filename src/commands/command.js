@@ -7,6 +7,7 @@ const ButtonBuilder = require('../buttonUtils/ButtonBuilder')
 const ActionRowBuilder = require('../buttonUtils/ActionRowBuilder')
 const permissions = require('../data/permissions')
 const Permissions = permissions.Permissions
+const levelClass = require('../level/level')
 let commandList = {}
 let commandGroups = {}
 let levels = {}
@@ -26,6 +27,14 @@ class Command {
 
     async execute(msg){
         require('dotenv').config()
+
+        let leveling = new levelClass(initParam(msg, "", "", "", this.main),msg)
+        let gain = await leveling.addExperience({mongo: this.main.mongo, msg}, msg, true)
+        if( gain.leveledUp){
+            msg.channel.send({embeds: [new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setDescription(`Congratulations, you leveled up to Level ${(await gain).data.level+1}!`).setColor("RANDOM")]})
+            leveling.rewards(initParam(msg, "", "", "", this.main), gain.data.level+1)
+        }
+
         let args = await checkPrefix(this.main, msg)
 
         if(!args?.args) return
@@ -155,6 +164,7 @@ function initParam(msg, command, args, level, main){
         "button": ButtonBuilder,
         "actionrow": ActionRowBuilder,
         "Permissions": Permissions,
+        "leveling": levelClass,
         "main": main,
 		"client":main.client,
 		"commands":commandList,
