@@ -65,10 +65,9 @@ class Button {
         let perms = await checkPerms(this.main, param)
 
         if(perms.perms === false){
-            if(perms.missing.includes('Send Messages')) return
+            if(perms.missing.includes('SendMessages')) return
             return param.interaction.reply( {content: `The bot is missing **${perms.missing.join(", ")}** permissions.`, ephemeral: true})
         }
-
         await executeCommand(param);
     }
 }

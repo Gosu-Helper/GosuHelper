@@ -13,7 +13,7 @@ module.exports = new ButtonInterface({
         let join = new p.embed()
             .setAuthor(p.interaction.member.guild.name, p.interaction.member.guild.iconURL())
             .setTitle("Welcome to Gosu(고수) Server")
-            .setDescription("\n\n**Go To Rules**: <#1200217121578307657>\n\nThis server abides by the following ToS.\n[Discord's Community Guidelines](https://discordapp.com/guidelines)\n[Discord's Term of Service](https://discordapp.com/terms)\n[MLBB's Terms of Service](https://m.mobilelegends.com/en/newsdetail/473)\n")
+            .setDescription("\n\n**Click Extended Rules button to view full details.**\n\nThis server abides by the following ToS.\n[Discord's Community Guidelines](https://discordapp.com/guidelines)\n[Discord's Term of Service](https://discordapp.com/terms)\n[MLBB's Terms of Service](https://m.mobilelegends.com/en/newsdetail/473)\n")
             .setFooter({iconURL: p.interaction.member.guild.iconURL()})
             .setColor("#FFFEFE")
         p.interaction.reply({embeds: [join], components: [actionRow], ephemeral: true})

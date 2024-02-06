@@ -60,7 +60,7 @@ class Command {
         let perms = await checkPerms(this.main, param)
 
         if(perms.perms === false){
-            if(perms.missing.includes('Send Messages')) return
+            if(perms.missing.includes('SendMessages')) return
             return param.send(`The bot is missing **${perms.missing.join(", ")}** permissions.`)
         }
 
