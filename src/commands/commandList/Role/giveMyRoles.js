@@ -1,7 +1,7 @@
 const CommandInterface = require("../../commandInterface");
 
 module.exports = new CommandInterface({
-    alias: ['givemyroles','giveroles'],
+    alias: ['givemyroles','giveroles','gmr'],
     args: '',
     desc: "Returns all the roles that allowed/can be returned.",
     related: ["hns savemyroles", "hns mysavedroles"],

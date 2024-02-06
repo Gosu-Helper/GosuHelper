@@ -1,7 +1,7 @@
 const CommandInterface = require("../../commandInterface");
 
 module.exports = new CommandInterface({
-    alias: ['savemyroles', 'saveroles'],
+    alias: ['savemyroles', 'saveroles','smr'],
     args: '',
     desc: "Saves your current roles.",
     cd: 10000,

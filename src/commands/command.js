@@ -2,7 +2,6 @@ const requireDir = require('require-dir')
 const CommandInterface = require('./commandInterface')
 const dir = requireDir('./commandList', {recurse: true})
 const Embed = require('../utils/embed')
-const { PermissionsBitField } = require('discord.js')
 const ButtonBuilder = require('../buttonUtils/ButtonBuilder')
 const ActionRowBuilder = require('../buttonUtils/ActionRowBuilder')
 const permissions = require('../data/permissions')
@@ -252,10 +251,13 @@ async function checkPerms(main, p){
     let Target = await p.msg.guild.members.fetch(main.client.user.id)
 
     if(Target.permissions.has(Permissions.Administrator)) return {perms: true}
-    else if(!p.msg.channel.permissionsFor(Target).has(Permissions.SendMessages)) missing.push('Send Messages')
+    else if(!p.msg.channel.permissionsFor(Target).has(Permissions.SendMessages)) missing.push('SendMessages')
     else{
         for(let perm in commandList[p.command].permissions){
-            if(!p.msg.channel.permissionsFor(Target).has(Permissions[commandList[p.command].permissions[perm]])){
+            if(commandList[p.command].permissions[perm] == 'ManageRoles'){
+                if(!Target.permissions.has(Permissions[commandList[p.command].permissions[perm]])) missing.push("Manage Roles")
+            }
+            else if(!p.msg.channel.permissionsFor(Target).has(Permissions[commandList[p.command].permissions[perm]])){
                 missing.push(fixPerms(false, commandList[p.command].permissions[perm]))
             }
         }

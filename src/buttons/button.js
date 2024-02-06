@@ -3,7 +3,8 @@ const ActionRowBuilder = require('../buttonUtils/ActionRowBuilder')
 const ButtonInterface = require('./buttonInterface')
 const ButtonBuilder = require('../buttonUtils/ButtonBuilder')
 const Embed = require('../utils/embed')
-const { PermissionsBitField } = require('discord.js');
+const permissions = require('../data/permissions')
+const Permissions = permissions.Permissions
 const dirButtonComponent = requireDir('./buttonComponent')
 const dirLevelButtonComponent = requireDir('./levelButtonComponent')
 const dirRoleButtonComponent = requireDir('./roleButtonComponent')
@@ -333,13 +334,14 @@ async function checkPerms(main, p){
         setTimeout(() => {delete cdCache[p.interaction.user.id+p.command]}, cooldown)
     }
 
-    if(Target.permissions.has(PermissionsBitField.Flags.Administrator)) return {perms: true}
-    else if(!p.interaction.channel.permissionsFor(Target).has(/*'SEND_MESSAGES'*/PermissionsBitField.Flags.SendMessages)) {
-        missing.push('Send Messages')
-    }
+    if(Target.permissions.has(Permissions.Administrator)) return {perms: true}
+    else if(!p.interaction.channel.permissionsFor(Target).has(Permissions.SendMessages)) missing.push('SendMessages')
     else{
         for(let perm in buttonCommandList[p.command].permissions){
-            if(!p.interaction.channel.permissionsFor(Target).has(/*commandList[p.command].permissions[perm]*/PermissionsBitField.Flags.ManageRoles)){
+            if(buttonCommandList[p.command].permissions[perm] == 'ManageRoles'){
+                if(!Target.permissions.has(Permissions[buttonCommandList[p.command].permissions[perm]])) missing.push("Manage Roles")
+            }
+            else if(!p.interaction.message.channel.permissionsFor(Target).has(Permissions[buttonCommandList[p.command].permissions[perm]])){
                 missing.push(fixPerms(false, buttonCommandList[p.command].permissions[perm]))
             }
         }
@@ -377,7 +379,10 @@ function fixPerm(perms){
  * @returns {Array}
  */
 function fixPerms(filter,...perms){
-    let include = ['ADMINISTRATOR','MANAGE_GUILD','MANAGE_ROLES','MANAGE_CHANNELS','MANAGE_MESSAGES','MANAGE_WEBHOOKS','MANAGE_NICKNAMES','MANAGE_EMOJIS_AND_STICKERS','KICK_MEMBERS','BAN_MEMBERS','MODERATE_MEMBERS','MANAGE_EVENTS','MANAGE_THREADS']//['START_EMBEDDED_ACTIVITIES', 'SEND_MESSAGES_IN_THREADS', 'CREATE_PRIVATE_THREADS', 'CREATE_PUBLIC_THREADS', 'REQUEST_TO_SPEAK', 'USE_VAD', 'CONNECT', 'SPEAK', 'PRIORITY_SPEAKER', 'STREAM', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES', 'READ_MESSAGE_HISTORY',]
+    /*let include = ['Administrator','ManageGuild','ManageRoles','ManageChannels','ManageMessages','ManageWehooks','ManageNicknames','ManageGuildExpressions','KickMembers','BanMembers','ModerateMembers','ManageEvents','ManageThreads']//['START_EMBEDDED_ACTIVITIES', 'SEND_MESSAGES_IN_THREADS', 'CREATE_PRIVATE_THREADS', 'CREATE_PUBLIC_THREADS', 'REQUEST_TO_SPEAK', 'USE_VAD', 'CONNECT', 'SPEAK', 'PRIORITY_SPEAKER', 'STREAM', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES', 'READ_MESSAGE_HISTORY',]
+    if(filter === true) perms = perms.flat(2).filter((perm) => include.includes(perm))
+    else if(Array.isArray(filter)) perms = perms.flat(2).filter((perm) => filter.includes(perm))*/
+    let include = ["Administrator", "ManageGuild","ManageRoles","ManageChannels","ManageMessages","ManageWebhooks","ManageNicknames","ManageGuildExpressions","KickMembers","BanMembers","ModerateMembers","ManageEvents","ManageThreads",Permissions.Administrator,Permissions.ManageGuild,Permissions.ManageRoles,Permissions.ManageChannels,Permissions.ManageMessages,Permissions.ManageWebhooks,Permissions.ManageNicknames,Permissions.ManageGuildExpressions,Permissions.KickMembers,Permissions.BanMembers,Permissions.ModerateMembers,Permissions.ManageEvents,Permissions.ManageThreads]//['START_EMBEDDED_ACTIVITIES', 'SEND_MESSAGES_IN_THREADS', 'CREATE_PRIVATE_THREADS', 'CREATE_PUBLIC_THREADS', 'REQUEST_TO_SPEAK', 'USE_VAD', 'CONNECT', 'SPEAK', 'PRIORITY_SPEAKER', 'STREAM', 'VIEW_CHANNEL', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES', 'READ_MESSAGE_HISTORY',]
     if(filter === true) perms = perms.flat(2).filter((perm) => include.includes(perm))
     else if(Array.isArray(filter)) perms = perms.flat(2).filter((perm) => filter.includes(perm))
 

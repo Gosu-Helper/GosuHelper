@@ -2,7 +2,7 @@ const ButtonInterface = require('../buttonInterface')
 
 module.exports = new ButtonInterface({
     alias: ['agree-to-rules'],
-    permissions: ['MANAGE_ROLES'],
+    permissions: ['ManageRoles'],
     permLevel: 'User',
     group: [],
     execute: async function(p){

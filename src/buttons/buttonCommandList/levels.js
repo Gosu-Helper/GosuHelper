@@ -6,7 +6,7 @@ const lvl50 = ['landowner', 'business-owner', 'commander', 'philosopher']
 
 module.exports = new ButtonInterface({
     alias: ['worker', 'noble', 'farmer', 'peddler', 'soldier', 'scholar', 'head-farmer', 'head-merchant', 'colonel', 'head-scholar', 'landowner', 'business-owner', 'commander', 'philosopher'],
-    permisions: ['MANAGE_ROLES'],
+    permisions: ['ManageRoles'],
     permLevel: 'User',
     group: [],
     execute: async function(p){

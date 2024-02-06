@@ -1,7 +1,7 @@
 const CommandInterface = require("../../commandInterface");
 
 module.exports = new CommandInterface({
-    alias: ["mysavedroles"],
+    alias: ["mysavedroles",'msr'],
     args: '',
     desc: "View all your saved roles.",
     related: ["hns savemyroles"],
