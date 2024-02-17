@@ -4,7 +4,7 @@ module.exports = new CommandInterface({
     alias: ["recache-roles"],
     args: '',
     desc: "Recache and removes any unavailable saved server roles.",
-    related: ["hns view-roles"],
+    related: ["gh view-roles"],
     permissions: [],
     permLevel: 'Administrator',
     group: ["Role"],

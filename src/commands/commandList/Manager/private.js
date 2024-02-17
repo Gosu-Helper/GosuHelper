@@ -5,7 +5,7 @@ module.exports = new CommandInterface({
     args: '[command name]',
     desc: "Private a command or module.",
     related: [],
-    permissions: ["MANAGE_MESSAGES"],
+    permissions: ["ManageMessages"],
     permLevel: 'Bot Owner',
     group: ["Manager"],
     execute: async function(p){

@@ -7,7 +7,7 @@ module.exports = new CommandInterface({
     alias: ['level'],
     args: '(user)',
     desc: "Check your current level.",
-    related:["hns info"],
+    related:["gh rank"],
     permissions:[],
     permLevel: 'User',
     group:["Miscellaneous"],

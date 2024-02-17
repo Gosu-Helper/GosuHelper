@@ -4,7 +4,7 @@ module.exports = new CommandInterface({
     alias: ['disallow-role'],
     args: '[role]',
     desc: "Added roles to the disallowed saved roles.",
-    related: ["hns allow-role", "hns view-roles"],
+    related: ["gh allow-role", "gh view-roles"],
     permissions: [],
     permLevel: 'Administrator',
     group: ["Role"],
@@ -54,7 +54,7 @@ module.exports = new CommandInterface({
                 data.disallowedRoles.push(roleID)
                 success.setDescription(`Added \`${role.name}\` to disallowed saved roles.`)
             } else if(data.disallowedRoles.includes(roleID)){
-                let targetRole = data.allowedRoles.indexOf(roleID)
+                let targetRole = data.disallowedRoles.indexOf(roleID)
                 data.disallowedRoles.splice(targetRole, 1)
                 success.setDescription(`Removed \`${role.name}\` from disallowed saved roles.`)
             }

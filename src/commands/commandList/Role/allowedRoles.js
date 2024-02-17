@@ -4,7 +4,7 @@ module.exports = new CommandInterface({
     alias: ["allow-role"],
     args: '[role]',
     desc: "Added roles to the allowed saved roles.",
-    related: ["disallow-role"],
+    related: ["gh disallow-role"],
     permissions: [],
     permLevel: 'Administrator',
     group: ["Role"],
@@ -32,7 +32,7 @@ module.exports = new CommandInterface({
         let role = p.msg.mentions.roles.first() || await p.fetchRole(p.args[0]) //Fetch role from mention if not ID
         let Target = await p.fetchUser(p.client.user.id) //Fetch client from guild
         let user = await p.fetchUser(p.msg.author.id) //Fetch author from guild
-        let keyPerms = ['ADMINISTRATOR', 'KICK_MEMBERS', 'BAN_MEMBERS', 'MANAGE_CHANNELS', 'MANAGE_GUILD', 'MANAGE_MESSAGES', 'MANAGE_ROLES', 'MANAGE_EMOJIS_AND_STICKERS', 'MODERATE_MEMBERS']
+        let keyPerms = ['Administrator', 'KickMembers', 'BanMembers', 'ManageChannels', 'ManageGuild', 'ManageMessages', 'ManageRoles', 'ManageGuildExpressions', 'ModerateMembers']
     
         //If unable to find role return unfound
         if(!role) return p.send(unfound)
@@ -56,7 +56,7 @@ module.exports = new CommandInterface({
         if(!data.disallowedRoles.includes(roleID)){
             if(!data.allowedRoles.includes(roleID)){
                 if(similar?.length > 0){
-                    const response = await p.awaitReply(`This role contains **${similar.join(", ")}** permissions. Are you sure you want to add ${role.name} into saved roles? y/n`)
+                    const response = await p.awaitReply(`This role contains **${similar.join(", ")}** permissions. Are you sure you want to add ${role.name} into saved roles? y/n`, true)
                     if(["y", "yes"].includes(response)) p.send("Allowed")
                     else return p.send("Cancelled")
                 }

@@ -4,7 +4,7 @@ module.exports = new CommandInterface({
     alias: ['ping', 'pong','ms'],
     args: '',
     desc: "Get bot ping.",
-    related:["hns info"],
+    related:["gh info"],
     permissions:[],
     permLevel: 'User',
     group:["Info"],

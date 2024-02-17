@@ -4,7 +4,7 @@ module.exports = new CommandInterface({
     alias: ['viewroles', 'view-roles', 'list-roles'],
     args: '(user)',
     desc: "View all allowed and disallowed saved roles for the server/saved roles for user.",
-    related: ["hns allow-role", "hns disallow-role"],
+    related: ["gh allow-role", "gh disallow-role"],
     permissions: [],
     permLevel: "Server Moderator",
     group: ["Role"],

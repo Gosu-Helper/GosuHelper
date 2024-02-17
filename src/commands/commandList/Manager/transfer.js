@@ -4,7 +4,7 @@ module.exports = new CommandInterface({
     alias: ['transfer'],
     args: '[user] [level] [experience]',
     desc: "Transfers users level.",
-    related:["hns level"],
+    related:["gh transfer"],
     permissions:[],
     permLevel: 'Server Moderator',
     group:["Manager"],

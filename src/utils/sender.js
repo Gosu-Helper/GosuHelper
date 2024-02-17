@@ -169,7 +169,7 @@ function createMessage(msg, content, sep=false, del, file, opt){
                     return
                 }
                 if(!contents.embeds&&!contents.content&&!contents.files&&!sep) return console.log("Nothing was sent")
-                msg.channel.send(contents).catch(err => console.log(err))
+                return msg.channel.send(contents).catch(err => console.log(err))
             } catch(err2){
                 console.log(err2)
             }

@@ -29,7 +29,7 @@ class Command {
 
         let leveling = new levelClass(initParam(msg, "", "", "", this.main),msg)
         let gain = await leveling.addExperience({mongo: this.main.mongo, msg}, msg, true)
-        if( gain.leveledUp){
+        if(gain.leveledUp){
             msg.channel.send({embeds: [new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setDescription(`Congratulations, you leveled up to Level ${(await gain).data.level+1}!`).setColor("RANDOM")]})
             leveling.rewards(initParam(msg, "", "", "", this.main), gain.data.level+1)
         }
@@ -76,6 +76,16 @@ class Command {
         }
 
         await executeCommand(param);
+    }
+}
+
+async function executeCommand(p){
+    await commandList[p.command].execute(p)
+    if(!cdCache[p.msg.author.id+p.command]){
+        let cooldown = 3000
+        if(commandList[p.command]["cd"]) cooldown = commandList[p.command].cd
+        cdCache[p.msg.author.id+p.command] = {cooldown: cooldown, now: Date.now()}
+        setTimeout(() => {delete cdCache[p.msg.author.id+p.command]}, cooldown)
     }
 }
 
@@ -138,16 +148,6 @@ function initLevels(){
     }
 }
 
-async function executeCommand(p){
-    await commandList[p.command].execute(p)
-    if(!cdCache[p.msg.author.id+p.command]){
-        let cooldown = 3000
-        if(commandList[p.command]["cd"]) cooldown = commandList[p.command].cd
-        cdCache[p.msg.author.id+p.command] = {cooldown: cooldown, now: Date.now()}
-        setTimeout(() => {delete cdCache[p.msg.author.id+p.command]}, cooldown)
-    }
-}
-
 function initParam(msg, command, args, level, main){
     return {
 		"msg":msg,
@@ -171,6 +171,7 @@ function initParam(msg, command, args, level, main){
 		"config":main.config,
         "mongo": main.mongo,
         "zws": '​',
+        "fixPerms":fixPerms,
         "fetchUser":async function(id){
             id = id?.match(/\d+/g)
             if(!id) return null
@@ -203,12 +204,12 @@ function initParam(msg, command, args, level, main){
                 return mentions
             } else return null
         },
-        "fixPerms":fixPerms,
-        "awaitReply":async function awaitReply(question, limit = 60000) {
+        "awaitReply":async function awaitReply(question, del = false, limit = 60000){
             const filter = m => m.author.id === msg.author.id;
-            await msg.channel.send(question);
+            const message = await msg.channel.send(question);
             try {
                 const collected = await msg.channel.awaitMessages({ filter, max: 1, time: limit, errors: ["time"] });
+                if(del) message.delete()
                 return collected.first().content;
             } catch (e) {
                 return false;
@@ -273,22 +274,6 @@ async function checkPerms(main, p){
     }
 }
 
-function fixPerm(perms){
-    if(perms == Permissions.ManageGuild){
-        perms = 'MANAGE_SERVER'
-    }
-    if(perms == Permissions.ModerateMembers){
-        perms = 'TIMEOUT_MEMBERS'
-    }
-    //console.log(perms)
-    let words = perms.split("_")
-    let combined = []
-    for(let j of words){
-        let word = j.toLowerCase()
-        combined.push(word[0].toUpperCase()+word.substring(1))
-    }
-    return combined.join(' ')
-}
 /**
  * 
  * @param {boolean} filter Key Perms
@@ -306,6 +291,23 @@ function fixPerms(filter,...perms){
         perms = perms.flat(2).map(perm => fixPerm(perm))
         return perms
     } else return null
+}
+
+function fixPerm(perms){
+    if(perms == Permissions.ManageGuild){
+        perms = 'ManageServer'
+    }
+    if(perms == Permissions.ModerateMembers){
+        perms = 'TimeoutMembers'
+    }
+    
+    let words = perms.split(/(?=[A-Z])/g)
+    // let combined = []
+    // for(let j of words){
+    //     let word = j.toLowerCase()
+    //     combined.push(word[0].toUpperCase()+word.substring(1))
+    // }
+    return words.join(' ')
 }
 
 async function checkDisabled(p){

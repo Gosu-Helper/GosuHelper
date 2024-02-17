@@ -4,7 +4,7 @@ module.exports = new CommandInterface({
     alias: ['help'],
     args: '(command)',
     desc: "Get bot command list or info.",
-    related:["hns ping"],
+    related:["gh ping"],
     permissions:[],
     permLevel: 'User',
     group:["Info"],

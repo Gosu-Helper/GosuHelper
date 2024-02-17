@@ -4,7 +4,7 @@ module.exports = new CommandInterface({
     alias: ['givemyroles','giveroles','gmr'],
     args: '',
     desc: "Returns all the roles that allowed/can be returned.",
-    related: ["hns savemyroles", "hns mysavedroles"],
+    related: ["gh savemyroles", "gh mysavedroles"],
     permissions: ["ManageRoles"],
     permLevel: 'User',
     group: ["Role"],
@@ -23,7 +23,7 @@ module.exports = new CommandInterface({
 
         let user = await p.fetchUser(p.msg.author.id)
 
-        let keyPerms = ['ADMINISTRATOR', 'KICK_MEMBERS', 'BAN_MEMBERS', 'MANAGE_CHANNELS', 'MANAGE_GUILD', 'MANAGE_MESSAGES', 'MANAGE_ROLES', 'MANAGE_EMOJIS_AND_STICKERS', 'MODERATE_MEMBERS']
+        let keyPerms = ['Administrator', 'KickMembers', 'BanMembers', 'ManageChannels', 'ManageGuild', 'ManageMessages', 'ManageRoles', 'ManageGuildExpressions', 'ModerateMembers']
         
         let roles = []
 

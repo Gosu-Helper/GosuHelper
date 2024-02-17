@@ -4,7 +4,7 @@ module.exports = new CommandInterface({
     alias: ["mysavedroles",'msr'],
     args: '',
     desc: "View all your saved roles.",
-    related: ["hns savemyroles"],
+    related: ["gh savemyroles"],
     permissions: [],
     permLevel: 'User',
     group: ["Role"],

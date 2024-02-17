@@ -6,7 +6,7 @@ module.exports = new CommandInterface({
     alias: ['info'],
     args: '',
     desc: "Get bot info.",
-    related:["hns help"],
+    related:["gh help"],
     permissions:[],
     permLevel: 'User',
     group:["Info"],

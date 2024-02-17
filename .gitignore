@@ -128,3 +128,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+#Project
+err.txt
+/src/oauth2.js
+/src/commands/commandList/Manager/listen.js

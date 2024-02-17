@@ -5,7 +5,7 @@ module.exports = new CommandInterface({
     args: '',
     desc: "Saves your current roles.",
     cd: 10000,
-    related: ["hns mysavedroles"],
+    related: ["gh mysavedroles"],
     permissions: [],
     permLevel: 'User',
     group: ["Role"],

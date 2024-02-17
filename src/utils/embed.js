@@ -123,8 +123,8 @@ module.exports = class Embed {
      * @returns {Embed}
      */
     setTimestamp(timestamp = Date.now()){
-        this.timestamp = new Date(timestamp).getTime() ?? Date.now()
-        if(Number.isNaN(this.timestamp)) this.timestamp = Date.now()
+        this.timestamp = new Date(timestamp).toISOString() ?? new Date(Date.now()).toISOString()
+        if(Number.isNaN(this.timestamp)) this.timestamp = new Date(Date.now()).toISOString()
         return this
     }
     /**

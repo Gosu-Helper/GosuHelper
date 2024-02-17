@@ -4,9 +4,9 @@ module.exports = new CommandInterface({
     alias: ['prefix','pref'],
     args: '[prefix]',
     desc: "Changes server prefix.",
-    related:["hns info"],
+    related:["gh info"],
     permissions:[],
-    permLevel: 'User',
+    permLevel: 'Administrator',
     group:["Manager"],
     execute: async function(p){
         let success = new p.embed().setColor('SUCCESS')
