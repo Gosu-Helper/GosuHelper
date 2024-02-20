@@ -18,7 +18,7 @@ module.exports = new CommandInterface({
         //Avatar embed
         let avatar = new p.embed().setTitle("Avatar").setTimestamp()
 
-        avatar.setAuthor({name: Member.user.username+"#"+Member.user.discriminator, iconURL: Member.user.displayAvatarURL({dynamic: true})})
+        avatar.setAuthor({name: Member.user.username, iconURL: Member.user.displayAvatarURL({dynamic: true})})
             .setImage(`${Member.user.displayAvatarURL({dynamic: true, size: 512})}`)
             .setColor('HEART')
         return p.send(avatar)

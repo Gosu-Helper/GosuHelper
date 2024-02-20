@@ -1,5 +1,7 @@
 //To Be Continued
 
+const {PermissionsBitField} = require('discord.js')
+
 require('dotenv').config()
 const confLevels = {
     // Bot Admins, level 9 by default. Array of user ID strings.
@@ -27,7 +29,7 @@ const confLevels = {
           try {
             //const modRole = message.guild.roles.cache.find(r => r.name.toLowerCase() === message.settings.modRole.toLowerCase());
             //if(modRole && message.member.roles.cache.has(modRole.id))
-            if (message.member.permissions.has('MANAGE_MESSAGES') && message.member.permissions.has('KICK_MEMBERS')) return true;
+            if (message.member.permissions.has(PermissionsBitField.Flags.ManageMessages) && message.member.permissions.has(PermissionsBitField.Flags.KickMembers)) return true;
           } catch (e) {
             return false;
           }
@@ -39,7 +41,7 @@ const confLevels = {
         check: (message) => {
           try {
             //const adminRole = message.guild.roles.cache.find(r => r.name.toLowerCase() === message.settings.adminRole.toLowerCase());
-            return (/*adminRole && */message.member.permissions.has('ADMINISTRATOR'));
+            return (/*adminRole && */message.member.permissions.has(PermissionsBitField.Flags.Administrator));
           } catch (e) {
             return false;
           }
