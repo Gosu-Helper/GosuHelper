@@ -133,3 +133,4 @@ dist
 err.txt
 /src/oauth2.js
 /src/commands/commandList/Manager/listen.js
+/src/utils/param.js
