@@ -11,13 +11,13 @@ module.exports = new CommandInterface({
     execute: async function(p){
         let member = await p.fetchUser(p.args[0])
         let success = new p.embed()
-            .setAuthor({name: member.user.username, iconURL: member.displayAvatarURL({dynamic: true})})
+            .setAuthor({name: member?.user?.username, iconURL: member?.displayAvatarURL({dynamic: true})})
             .setColor('SUCCESS')
         let unfound = new p.embed()
             .setDescription("I couldn't find that user.")
             .setColor("UNFOUND")
         let unable = new p.embed()
-            .setAuthor({name: member.user.username, iconURL: member.displayAvatarURL({dynamic: true})})
+            .setAuthor({name: member?.user?.username, iconURL: member?.displayAvatarURL({dynamic: true})})
             .setColor('FAILURE')
         
         let guild = await p.client.guilds.fetch("495716062097309697")
