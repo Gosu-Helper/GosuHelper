@@ -22,7 +22,7 @@ module.exports = new CommandInterface({
 
         Font.loadDefault()
         let card = new RankCardBuilder()
-            .setAvatar(member?.displayAvatarURL({dynamic: true})??p.msg.author.displayAvatarURL({dynamic: true}))
+            .setAvatar(member?.displayAvatarURL({forceStatic: true})??p.msg.author.displayAvatarURL({forceStatic: true}))
             .setDisplayName(member?.username??p.msg.author.username)
             .setStatus(member?.presence?.status??(await p.fetchUser(p.msg.author.id))?.presence?.status)
             .setRank((rank+1)||"?")
