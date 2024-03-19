@@ -6,7 +6,7 @@ const ButtonBuilder = require('../buttonUtils/ButtonBuilder')
 const ActionRowBuilder = require('../buttonUtils/ActionRowBuilder')
 const permissions = require('../data/permissions')
 const Permissions = permissions.Permissions
-const levelClass = require('../level/level')
+const levelClass = require('../utils/level')
 let commandList = {}
 let commandGroups = {}
 let levels = {}
@@ -27,11 +27,13 @@ class Command {
     async execute(msg){
         require('dotenv').config()
 
-        let leveling = new levelClass(initParam(msg, "", "", "", this.main),msg)
-        let gain = await leveling.addExperience({mongo: this.main.mongo, msg}, msg, true)
+        const levelParam = initParam(msg, "Leveling", "", "", this.main)
+
+        let leveling = new levelClass(levelParam,msg)
+        let gain = await leveling.addExperience(levelParam, msg, true)
         if(gain.leveledUp){
-            msg.channel.send({embeds: [new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setDescription(`Congratulations, you leveled up to Level ${(await gain).data.level+1}!`).setColor("RANDOM")]})
-            leveling.rewards(initParam(msg, "", "", "", this.main), gain.data.level+1)
+            if(!(await checkDisabled(levelParam))) msg.channel.send({embeds: [new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setDescription(`Congratulations, you leveled up to Level ${(await gain).data.level+1}!`).setColor("RANDOM")]})
+            leveling.rewards(levelParam, gain.data.level+1)
         }
 
         let args = await checkPrefix(this.main, msg)
@@ -50,7 +52,8 @@ class Command {
 
         let disabled = await checkDisabled(param)
 
-        if(disabled) return param.send(new param.embed({description: 'This commmand is disabled on this server.', color: 'ERROR'}))
+        if(disabled==1) return param.send(new param.embed({description: 'This commmand is disabled on this channel.', color: 'ERROR'}))
+        else if(disabled==2) return param.send(new param.embed({description: 'This commmand is disabled on this server.', color: 'ERROR'}))
 
         let privated = await checkPrivated(param)
         
@@ -188,6 +191,14 @@ function initParam(msg, command, args, level, main){
             if(role) return role
             else return null
         },
+        "fetchChannel": async function(id){
+            id = id?.match(/\d+/g)
+            if(!id) return null
+            id = id[0]
+            let guild = await msg.guild.channels.fetch(id).catch(err => {return null})
+            if(guild) return guild
+            else return null
+        },
         /**
          * 
          * @param {string} type user|role
@@ -312,7 +323,9 @@ function fixPerm(perms){
 
 async function checkDisabled(p){
     let data = await p.mongo.queryOne("command", p.msg.guildId)
-    return !!(data?.disabled.includes(p.command));
+    let chnl = data.channel.indexOf((data?.channel?.filter(channels => channels._id == p.msg.channel.id))[0])
+    if(p.command == "Leveling") return (data?.channel[chnl]?.module?.includes(p.command) ? 1 : 0)
+    return (data?.channel[chnl]?.commands?.includes(p.command) ? 1 : data?.disabled.includes(p.command) ? 2 : 0);
 }
 
 async function checkPrivated(p){

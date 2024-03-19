@@ -10,7 +10,7 @@ module.exports = new CommandInterface({
     related:["gh rank", "level"],
     permissions:[],
     permLevel: 'User',
-    group:["Miscellaneous"],
+    group:["Leveling"],
     execute: async function(p){
         p.send("In progress")
     }

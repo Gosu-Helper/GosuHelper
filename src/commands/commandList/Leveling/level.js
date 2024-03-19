@@ -10,7 +10,7 @@ module.exports = new CommandInterface({
     related:["gh rank"],
     permissions:[],
     permLevel: 'User',
-    group:["Miscellaneous"],
+    group:["Leveling"],
     execute: async function(p){
         let member = (await p.fetchUser(p.args[0]))?.user
 

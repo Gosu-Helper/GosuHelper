@@ -1,4 +1,5 @@
 const CommandInterface = require('../../commandInterface')
+const levelClass = require('../../../utils/level')
 
 module.exports = new CommandInterface({
     alias: ['transfer'],
@@ -42,6 +43,10 @@ module.exports = new CommandInterface({
         data.exp = exp
 
         await data.save()
+
+        p.msg.author.id = member.id
+
+        new levelClass(p, p.msg).rewards(p, level)        
 
         success.setDescription(`Updated <@!${member.id}> to Level ${level} with ${exp} experience.`)
         p.send(success)
