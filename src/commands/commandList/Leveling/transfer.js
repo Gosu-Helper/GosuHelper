@@ -3,12 +3,12 @@ const levelClass = require('../../../utils/level')
 
 module.exports = new CommandInterface({
     alias: ['transfer'],
-    args: '[user] [level] [experience]',
+    args: '[user] [level] (experience)',
     desc: "Transfers users level.",
     related:["gh transfer"],
     permissions:[],
     permLevel: 'Server Moderator',
-    group:["Manager"],
+    group:["Leveling"],
     execute: async function(p){
         let member = await p.fetchUser(p.args[0])
         let success = new p.embed()
@@ -34,19 +34,17 @@ module.exports = new CommandInterface({
         if(!data) data = await p.mongo.createOne("level", { _id: member.id, level: 0, exp: 0, lastSent: 0})
 
         let level = parseInt(p.args[1], 10)
-        let exp = parseInt((p.args[2] ?? 0), 10)
+        let exp = parseInt((p.args[2]?.split(",")?.join("") ?? 0), 10)
 
-        if(Number.isNaN(level) || !(level == p.args[1])) p.send(unable.setDescription(`Unable to set the Level for <@!${member.id}>\nPlease enter a valid number`))
-        else if(Number.isNaN(exp) || !(exp == (p.args[2] || 0))) p.send(unable.setDescription(`Unable to set the Experience for <@!${member.id}>\nPlease enter a valid number.`))
+        if(Number.isNaN(level) || !(level == p.args[1])) return p.send(unable.setDescription(`Unable to set the Level for <@!${member.id}>\nPlease enter a valid number`))
+        else if(Number.isNaN(exp)) return p.send(unable.setDescription(`Unable to set the Experience for <@!${member.id}>\nPlease enter a valid number.`))
 
         data.level = level
         data.exp = exp
 
         await data.save()
 
-        p.msg.author.id = member.id
-
-        new levelClass(p, p.msg).rewards(p, level)        
+        new levelClass(p, p.msg).rewards(p, member, level)
 
         success.setDescription(`Updated <@!${member.id}> to Level ${level} with ${exp} experience.`)
         p.send(success)

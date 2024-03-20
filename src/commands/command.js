@@ -27,13 +27,17 @@ class Command {
     async execute(msg){
         require('dotenv').config()
 
+        let level = (require('../utils/permLevel')).permlevel(msg)
         const levelParam = initParam(msg, "Leveling", "", "", this.main)
 
+        if(level < 2 && !(await checkDisabled(initParam(msg,"Automod", "", "", this.main)))){
+            if(await commandList['automod'].execute(initParam(msg, "automod", "", "", this.main))) return
+        }
         let leveling = new levelClass(levelParam,msg)
         let gain = await leveling.addExperience(levelParam, msg, true)
         if(gain.leveledUp){
             if(!(await checkDisabled(levelParam))) msg.channel.send({embeds: [new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setDescription(`Congratulations, you leveled up to Level ${(await gain).data.level+1}!`).setColor("RANDOM")]})
-            leveling.rewards(levelParam, gain.data.level+1)
+            leveling.rewards(levelParam, msg.author, gain.data.level+1)
         }
 
         let args = await checkPrefix(this.main, msg)
@@ -43,8 +47,6 @@ class Command {
         let command = args.args.shift().toLowerCase()
 
         if(!commandList[command]) return
-
-        let level = (require('../utils/permLevel')).permlevel(msg)
 
         if(level < levels[commandList[command].permLevel]) return
 
@@ -324,7 +326,7 @@ function fixPerm(perms){
 async function checkDisabled(p){
     let data = await p.mongo.queryOne("command", p.msg.guildId)
     let chnl = data.channel.indexOf((data?.channel?.filter(channels => channels._id == p.msg.channel.id))[0])
-    if(p.command == "Leveling") return (data?.channel[chnl]?.module?.includes(p.command) ? 1 : 0)
+    if(p.command == "Leveling" || p.command === "Automod") return (data?.channel[chnl]?.module?.includes(p.command) ? 1 : 0)
     return (data?.channel[chnl]?.commands?.includes(p.command) ? 1 : data?.disabled.includes(p.command) ? 2 : 0);
 }
 

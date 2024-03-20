@@ -86,7 +86,7 @@ module.exports = class Level{
         const currentLevelExp = await this.currentLevelExp(p, data._id)
         let expDifference = currentLevelExp-currentUserExp
         const nextLevel = expDifference <= 0 ? true : false
-        expDifference = expDifference < 0 ? -expDifference : expDifference
+        expDifference = expDifference < 0 ? -expDifference : currentUserExp
 
         if(nextLevel){
             data.level += 1
@@ -137,9 +137,9 @@ module.exports = class Level{
         return {nextLevel, expDifference, data}
     }
 
-    async rewards(p, level){
+    async rewards(p, user, level){
         let Target = await p.fetchUser(p.client.user.id) //Fetch client from guild
-        let user = await p.fetchUser(p.msg.author.id) //Fetch author from guild
+        let member = await p.fetchUser(user.id) //Fetch author from guild
 
         let reward = {
             "5": {
@@ -176,16 +176,16 @@ module.exports = class Level{
             let levelRoles = Object.entries(reward).filter(role => Number.parseInt(role) <= level)
             for(let roles in levelRoles){
                 if(Target.roles.highest.position < reward[level].lvl.position || Target.roles.highest.position < reward[level].color.position || !p.msg.channel.permissionsFor(Target).has(p.Permissions.ManageRoles)) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
-                user.roles.add(reward[levelRoles[roles][0]].lvl)
-                user.roles.add(reward[levelRoles[roles][0]].color)
+                member.roles.add(reward[levelRoles[roles][0]].lvl)
+                member.roles.add(reward[levelRoles[roles][0]].color)
             }
             if(level>=5){
                 if(Target.roles.highest.position < reward["5"].nick.position) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
-                else user.roles.add(reward["5"].nick)
+                else member.roles.add(reward["5"].nick)
             }
             if(level>=15){
                 if(Target.roles.highest.position < reward["15"].attachments.position) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
-                user.roles.add(reward["15"].attachments)
+                member.roles.add(reward["15"].attachments)
             }
         }
     }

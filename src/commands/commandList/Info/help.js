@@ -30,6 +30,7 @@ function display(p, help, setting){
                     for(let name in p.commandGroups[module][permLevel][commandObj]){//Grabs the name of the command
                         if(p.level < p.levels[permLevel] && p.levels[permLevel] > 5) break//If user level is less than permission group level and command permLevel is greater than Lv5 -> break
                         if(p.commands[name]["gosu"] && !(["493164609591574528","495716062097309697","491747726208270338"].includes(p.msg.guildId))) continue //If the command is only within gosu servers
+                        if(p.commands[name]["hidden"]) continue
                         text += "`" + name + "`, "
                     }
                 }
