@@ -3,10 +3,10 @@ const {Font, LeaderboardBuilder} = require('canvacord')
 const levelSchema = require('../../../../Schema/levelSchema')
 
 module.exports = new CommandInterface({
-    alias: ['leaderboard', 'lb'],
-    args: '(user)',
-    desc: "Checks the leaderboard.",
-    related:["gh rank", "gh level"],
+    alias: ['rank'],
+    args: '',
+    desc: "Checks your rank leaderboard.",
+    related:["gh leaderboard", "gh level"],
     permissions:[],
     permLevel: 'User',
     group:["Leveling"],
@@ -22,18 +22,30 @@ module.exports = new CommandInterface({
 
         let lbRank = []
         let count = 0
-        for(let rank in sortedRank){
-            if(count>9) break;
+        let min = userRank-4
+        let max = userRank+5
+        if(min<0){
+            min = 0
+            max = 9
+        }else if(max+1>=sortedRank.length){
+            max = sortedRank.length-1
+            min = max-9
+        }
+
+        for(let rank = min; rank<max+1; rank++){
             let rankObj = {}
             let user = (await p.fetchUser(sortedRank[rank]._id))?.user
-            if(!user) continue
+            if(!user){
+                max++
+                count++
+                continue
+            }
             rankObj.avatar = `${user?.displayAvatarURL({forceStatic: true})}`
             rankObj.username = `${user?.username}`
             rankObj.level = sortedRank[rank].level 
             rankObj.xp = sortedRank[rank].exp
-            rankObj.rank = count+1
+            rankObj.rank = rank-count+1
             lbRank.push(rankObj)
-            count++
         }
 
         Font.loadDefault();

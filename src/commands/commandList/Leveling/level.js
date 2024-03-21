@@ -1,5 +1,4 @@
 const CommandInterface = require('../../commandInterface')
-const {attachments} = require('discord.js')
 const {Font, RankCardBuilder} = require('canvacord')
 const levelSchema = require('../../../../Schema/levelSchema')
 
@@ -7,7 +6,7 @@ module.exports = new CommandInterface({
     alias: ['level'],
     args: '(user)',
     desc: "Check your current level.",
-    related:["gh rank"],
+    related:["gh leaderboard", "gh rank"],
     permissions:[],
     permLevel: 'User',
     group:["Leveling"],

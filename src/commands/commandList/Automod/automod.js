@@ -16,7 +16,8 @@ module.exports = new CommandInterface({
             .setColor("ERROR")
             .setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL())
             .setDescription(`**Message sent by <@!${p.msg.author.id}> deleted in <#${p.msg.channel.id}>**\n\n${p.msg.content}`)
-            .setFooter(`Author: ${p.msg.author.id} | Message: ${p.msg.id} • Today at ${DateTime.fromISO(p.msg.createdAt.toISOString()).toLocaleString(DateTime.TIME_SIMPLE)}`)
+            .setFooter(`Author: ${p.msg.author.id} | Message: ${p.msg.id} `)
+            .setTimestamp()
         let automodCase = new p.embed()
             .setColor("ERROR")
             .setAuthor(`Kick | ${p.msg.author.username}`, p.msg.author.displayAvatarURL())
@@ -24,7 +25,8 @@ module.exports = new CommandInterface({
                 {name: "User", value: `<@!${p.msg.author.id}>`, inline: true},
                 {name: "Moderator", value: `<@!${p.client.user.id}>`, inline: true},
             )
-            .setFooter(`ID: ${p.msg.author.id} • Today at ${DateTime.fromISO(p.msg.createdAt.toISOString()).toLocaleString(DateTime.TIME_SIMPLE)}`)
+            .setFooter(`ID: ${p.msg.author.id} `)
+            .setTimestamp()
         let channel = await p.fetchChannel('495719174530924545')
         let modCaseChannel = await p.fetchChannel('570934383121399808')
         let Target = await p.fetchUser(p.client.user.id)
