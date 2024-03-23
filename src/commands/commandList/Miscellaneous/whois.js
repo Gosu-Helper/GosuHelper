@@ -18,7 +18,7 @@ module.exports = new CommandInterface({
         if(!Member) return p.send(new p.embed().setDescription("I couldn't find that user.").setColor("UNFOUND"))
         //roles array with role id
         let roles = []
-        p.msg.member.roles.cache.sort((p, c) => c.position - p.position).forEach(role => {
+        Member.roles.cache.sort((p, c) => c.position - p.position).forEach(role => {
             roles.push(role.id)
         });
         roles = roles.slice(0, -1)//Remove @everyone role

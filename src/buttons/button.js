@@ -292,6 +292,14 @@ function initParam(interaction, command, args, level, main){
             if(role) return role
             else return null
         },
+        "fetchChannel": async function(id){
+            id = id?.match(/\d+/g)
+            if(!id) return null
+            id = id[0]
+            let guild = await interaction.guild.channels.fetch(id).catch(err => {return null})
+            if(guild) return guild
+            else return null
+        },
         /**
          * 
          * @param {string} type user|role

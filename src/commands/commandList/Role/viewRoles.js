@@ -1,7 +1,7 @@
 const CommandInterface = require("../../commandInterface");
 
 module.exports = new CommandInterface({
-    alias: ['viewroles', 'view-roles', 'list-roles'],
+    alias: ['viewroles', 'vr', 'view-roles', 'list-roles'],
     args: '(user)',
     desc: "View all allowed and disallowed saved roles for the server/saved roles for user.",
     related: ["gh allow-role", "gh disallow-role"],

@@ -1,7 +1,7 @@
 const CommandInterface = require("../../commandInterface");
 
 module.exports = new CommandInterface({
-    alias: ['force-save'],
+    alias: ['force-save', 'fs'],
     args: '[user]',
     desc: "Force saves an user\'s current roles.",
     related: ["gh view-roles"],
@@ -10,24 +10,26 @@ module.exports = new CommandInterface({
     group: ["Role"],
     gosu: true,
     execute: async function(p){
-        let success = new p.embed()
-        .setAuthor({name: Member.user.username, iconURL: Member.displayAvatarURL({dynamic: true})})
-        .setDescription(`Successfully saved <@!${Member.id}> **current** roles that are allowed to be saved.`)
-        .setColor('SUCCESS')
         const unfound = new p.embed()
         .setDescription("I couldn't find that user.")
         .setColor("UNFOUND")
         const userUnable = new p.embed()
         .setDescription('That user is above you.')
         .setColor('ERROR')
+
+        let Target = (p.msg.mentions.users.first())?.id || p.args.length > 0 ? p.args[0] : null
+        let Member = await p.fetchUser(Target)
+        if(!Member) return p.send(unfound)
+
+        let success = new p.embed()
+        .setAuthor({name: Member.user.username, iconURL: Member.displayAvatarURL({dynamic: true})})
+        .setDescription(`Successfully saved <@!${Member.id}> **current** roles that are allowed to be saved.`)
+        .setColor('SUCCESS')
         const unable = new p.embed()
         .setAuthor({name: Member.user.username, iconURL: Member.displayAvatarURL({dynamic: true})})
         .setDescription(`Unable to save <@!${Member.id}> roles or no roles to be saved.`)
         .setColor('FAILURE')
 
-        let Target = (p.msg.mentions.users.first())?.id || p.args.length > 0 ? p.args[0] : null
-        let Member = await p.fetchUser(Target)
-        if(!Member) return p.send(unfound)
 
         let keyPerms = ['Administrator', 'KickMembers', 'BanMembers', 'ManageChannels', 'ManageGuild', 'ManageMessages', 'ManageRoles', 'ManageGuildExpressions', 'ModerateMembers']
 
@@ -74,4 +76,3 @@ module.exports = new CommandInterface({
         p.send(success)
     }
 })
-

@@ -145,6 +145,8 @@ module.exports = class Level{
             "5": {
                 lvl: await p.fetchRole("497843968151781378"),
                 color: await p.fetchRole("813473502312398918"),
+            },
+            "10": {
                 nick: await p.fetchRole("874995842111668244")
             },
             "15": {
@@ -166,7 +168,8 @@ module.exports = class Level{
             }
         }
 
-        if(level >= 5 && level < 15) level = 5
+        if(level >= 5 && level < 10) level = 5
+        else if(level >= 10 && level < 15) level = 10
         else if(level >= 15 && level < 30) level = 15
         else if(level >= 30 && level < 50) level = 30
         else if(level >= 50 && level < 70) level = 50
@@ -175,13 +178,14 @@ module.exports = class Level{
         if(reward[level]){
             let levelRoles = Object.entries(reward).filter(role => Number.parseInt(role) <= level)
             for(let roles in levelRoles){
+                if(level==10) continue
                 if(Target.roles.highest.position < reward[level].lvl.position || Target.roles.highest.position < reward[level].color.position || !p.msg.channel.permissionsFor(Target).has(p.Permissions.ManageRoles)) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
                 member.roles.add(reward[levelRoles[roles][0]].lvl)
                 member.roles.add(reward[levelRoles[roles][0]].color)
             }
-            if(level>=5){
-                if(Target.roles.highest.position < reward["5"].nick.position) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
-                else member.roles.add(reward["5"].nick)
+            if(level>=10){
+                if(Target.roles.highest.position < reward["10"].nick.position) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
+                else member.roles.add(reward["10"].nick)
             }
             if(level>=15){
                 if(Target.roles.highest.position < reward["15"].attachments.position) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
