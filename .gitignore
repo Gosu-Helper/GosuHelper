@@ -134,3 +134,7 @@ err.txt
 /src/oauth2.js
 /src/commands/commandList/Manager/listen.js
 /src/utils/param.js
+/src/commands/commandList/Economy
+/src/data/gosuitems.js
+/Schema/balSchema.js
+/Schema/dailySchema.js

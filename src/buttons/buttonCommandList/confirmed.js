@@ -3,7 +3,7 @@ const ButtonBuilder = require('../../buttonUtils/ButtonBuilder')
 const ButtonInterface = require('../buttonInterface')
 
 module.exports = new ButtonInterface({
-    alias: ['confirm'],
+    alias: ['confirmed'],
     permisions: [],
     permLevel: 'User',
     group: [],
@@ -47,6 +47,7 @@ module.exports = new ButtonInterface({
             await data.save()
         })
         
-        p.interaction.reply({embeds: [confirmed], ephemeral: true})
+        if(p.interaction.replied) p.interaction.editReply({embeds: [confirmed], components: [], ephemeral: true})
+        else p.interaction.reply({embeds: [confirmed], ephemeral: true})
     }
 })
