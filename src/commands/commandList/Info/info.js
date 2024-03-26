@@ -1,4 +1,5 @@
 const {DateTime} = require('luxon')
+const {time} = require('discord.js')
 const CommandInterface = require('../../commandInterface')
 require('dotenv').config()
 
@@ -22,18 +23,18 @@ module.exports = new CommandInterface({
         .setAuthor({name: p.client.user.username, iconURL: p.client.user.displayAvatarURL({dynamic: true})})
         .addFields(
             {name: 'Dedicated For', value: 'Gosu General', inline: true},
-            {name: 'Version', value: '1.0.0', inline: true},
+            {name: 'Version', value: '1.20.1', inline: true},
             {name: 'Library', value: 'Discord.js', inline: true}
         )
         .addFields(
             {name: 'Creator', value: ownerName, inline: true},
-            {name: 'Created', value: `${DateTime.fromISO(p.client.user.createdAt.toISOString()).toLocaleString(DateTime.DATETIME_SHORT)}`, inline: true},
+            {name: 'Created', value: `${time(p.client.user.createdAt, "d")}, ${time(p.client.user.createdAt, "t")}`, inline: true},
             {name: 'Server', value: '[Link](https://discord.gg/gosugeneral)', inline: true}
         )
         .addFields(
             {name: 'Servers', value: `${guilds.size}`, inline: true},
             {name: 'Users', value: `${userCount}`, inline: true},
-            {name: `Joined`, value: `${DateTime.fromISO(clientJoinedAt).toLocaleString(DateTime.DATETIME_SHORT)}`, inline: true}
+            {name: `Joined`, value: `${time((await p.msg.guild.members.fetch(p.client.user.id)).joinedAt, "d")}, ${time((await p.msg.guild.members.fetch(p.client.user.id)).joinedAt, "t")}`, inline: true}
         )
         .setFooter({text: "All rights reserved to ⓒ 2024. Gosu General TV Inc.", iconURL: (await p.client.guilds.fetch("495716062097309697")).iconURL()})
         .setColor("820300")//.check(p.msg, true)
@@ -53,3 +54,6 @@ module.exports.help = {
     description: "Get bot info.",
     usage: "info"
 }
+
+/*`${DateTime.fromISO(p.client.user.createdAt.toISOString()).toLocaleString(DateTime.DATETIME_SHORT)}`*/
+/*`${DateTime.fromISO(clientJoinedAt).toLocaleString(DateTime.DATETIME_SHORT)}`*/

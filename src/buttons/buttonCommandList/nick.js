@@ -16,6 +16,8 @@ module.exports = new ButtonInterface({
 
         let role = await p.fetchRole("717765731139452988")
 
+        let nickRole = await p.fetchRole("874995842111668244")
+
         let error = new p.embed().setDescription(`Uh oh it seems like I am unable to assign the <@&${role.id}> to you.`).setColor("ERROR")
         let notConfirmed = new p.embed().setDescription("Your current application was not confirmed and was not sent.").setColor("ERROR")
         let notDeleted = new p.embed().setDescription("Your current application has not been deleted.").setColor("ERROR")
@@ -30,6 +32,7 @@ module.exports = new ButtonInterface({
         }
 
         if(user.roles.cache.has(role.id)) return
+        if(user.roles.cache.has(nickRole.id)) return
 
         user.roles.add(role)
 
@@ -156,7 +159,7 @@ module.exports = new ButtonInterface({
                         else if(proceed == 2) return p.interaction.editReply({embeds: [notConfirmed], components: [], ephemeral: true})
                     }).catch(collected => {
                         end(p, user, role, 99)
-                        return p.interaction.edit({embeds: [timeUp], components: [], ephemeral: true});
+                        return p.interaction.editReply({embeds: [timeUp], components: [], ephemeral: true});
                     });
                 });
             }catch(err){
