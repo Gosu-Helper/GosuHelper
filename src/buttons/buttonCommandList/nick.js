@@ -7,7 +7,7 @@ module.exports = new ButtonInterface({
     alias: ['nick'],
     permissions: [],
     permLevel: 'User',
-    cd: 0,//120000,
+    cd: 120000,
     group: [],
     execute: async function(p){
         let Target = await p.fetchUser(p.client.user.id)
@@ -31,8 +31,8 @@ module.exports = new ButtonInterface({
             return end(p, user, role)
         }
 
-        if(user.roles.cache.has(role.id)) return
-        if(user.roles.cache.has(nickRole.id)) return
+        if(user.roles.cache.has(nickRole.id)) return p.interaction.deferUpdate()
+        if(user.roles.cache.has(role.id)) return p.interaction.deferUpdate()
 
         user.roles.add(role)
 
@@ -164,7 +164,7 @@ module.exports = new ButtonInterface({
                 });
             }catch(err){
                 end(p, user, role, 99)
-                return p.interaction.reply("Seems like I couldn't proccess your application.")
+                return p.interaction.editReply("Seems like I couldn't proccess your application.")
             }
         }
     }
