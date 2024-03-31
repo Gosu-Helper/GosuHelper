@@ -38,7 +38,7 @@ module.exports = new ButtonInterface({
 
         let data = await p.mongo.queryOne("application", p.interaction.user.id)
 
-        if(data.nickname){
+        if(data?.nickname){
             nickname.addFields(
                 {
                     name: "Old", value: `${user.nickname||"None"}`
@@ -146,6 +146,7 @@ module.exports = new ButtonInterface({
                             }
                         )
 
+                        if(!data.nickname) data.nickname = { _id: p.interaction.user.id, nickname: { _id: p.interaction.user.id, name: `${user.username||user.displayName||p.interaction.user.username||"None"}` }}
                         data.nickname.name = `${collected.first().content.substring(0,32)}`||user.username||user.displayName||p.interaction.user.username||"None"
                         await data.save()
 
