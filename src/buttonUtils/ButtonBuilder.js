@@ -15,26 +15,27 @@ Object.freeze(ButtonStyle)
 
 module.exports = class ButtonBuilder{
     constructor(button){
+        this.data = {}
         this.construct(button)
     }
     construct(button){
         for (let key in button){
             switch(key){
                 case 'emoji': this.setEmoji(button[key]); break;
-                case 'label': this,setLabel(button[key]); break;
+                case 'label': this.setLabel(button[key]); break;
                 case 'style': this.setStyle(button[key]); break;
                 case 'url': this.setUrl(button[key]); break;
                 case 'custom_id': this.setCustomId(button[key]); break;
                 default: continue;
             }
         }
-        this.data = {
+        /*this.data = {
             type: 2,
             emoji: this.emoji ?? undefined,
             label: this.label ?? null,
             style: this.style ?? null,
             custom_id: this.custom_id ?? null
-        }
+        }*/
     }
 
     setEmoji(emoji){

@@ -26,7 +26,12 @@ module.exports = new ButtonInterface({
         }
 
         let applicationSchema = require('../../../Schema/applicationSchema')
-        await applicationSchema.deleteOne({_id: p.interaction.user.id})
+
+        if(!data?.promotion?.youtube&&!data?.promotion?.tiktok&&!data?.promotion?.youtube){
+            await applicationSchema.deleteOne({_id: p.interaction.user.id})
+        }else{
+            await applicationSchema.updateOne({_id: p.interaction.user.id}, { $unset: { nickname: {} } })
+        }
 
         if(p.interaction.replied) p.interaction.editReply({embeds: [deleted], components: [], ephemeral: true})
         else p.interaction.reply({embeds: [deleted], ephemeral: true})

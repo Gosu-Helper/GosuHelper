@@ -132,9 +132,11 @@ dist
 #Project
 err.txt
 /src/oauth2.js
+/src/buttons/buttonCommandList/instagram.js
+/src/buttonUtils/ButtonComponent.js
 /src/commands/commandList/Manager/listen.js
-/src/utils/param.js
 /src/commands/commandList/Economy
+/src/utils/param.js
 /src/data/gosuitems.js
 /Schema/balSchema.js
 /Schema/dailySchema.js

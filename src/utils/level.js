@@ -179,7 +179,7 @@ module.exports = class Level{
             let levelRoles = Object.entries(reward).filter(role => Number.parseInt(role) <= level)
             for(let roles in levelRoles){
                 if(levelRoles[roles][0]==10) continue
-                if(Target.roles.highest.position < reward[level].lvl.position || Target.roles.highest.position < reward[level].color.position || !p.msg.channel.permissionsFor(Target).has(p.Permissions.ManageRoles)) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
+                if(Target.roles.highest.position < reward[levelRoles[roles][0]].lvl.position || Target.roles.highest.position < reward[levelRoles[roles][0]].color.position || !p.msg.channel.permissionsFor(Target).has(p.Permissions.ManageRoles)) return p.send({embeds: [new p.embed().setAuthor(p.msg.author.username, p.msg.author.displayAvatarURL({dynamic: true})).setDescription("Unable to give you the role rewards for the level.")]})
                 member.roles.add(reward[levelRoles[roles][0]].lvl)
                 member.roles.add(reward[levelRoles[roles][0]].color)
             }

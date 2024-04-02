@@ -22,7 +22,7 @@ module.exports = new ButtonInterface({
         let notConfirmed = new p.embed().setDescription("Your current application was not confirmed and was not sent.").setColor("ERROR")
         let notDeleted = new p.embed().setDescription("Your current application has not been deleted.").setColor("ERROR")
         //let deleted = new p.embed().setDescription("Your application for nickname change has been deleted. You may continue to reapply.").setColor("SUCCESS")
-        let instructions = new p.embed().setDescription("**You will have 1 minute to type in your nickname. Please type what you want your new nickname to be. \n__It can only be 32 characters long.__ \n\nFor example:**  John Doe").setColor("OBTAIN")
+        let instructions = new p.embed().setTitle("Try Not To Delete This Message").setDescription("**You will have 1 minute to type in your nickname. Please type what you want your new nickname to be. \n__It can only be 32 characters long.__ \n\nFor example:**  John Doe").setColor("OBTAIN")
         let timeUp = new p.embed().setDescription("I did not receive a nickname. Please try again in 1-2 minutes.").setColor("ERROR")
         let nickname = new p.embed().setColor("OBTAINED")
 
