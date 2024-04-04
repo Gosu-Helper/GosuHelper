@@ -124,7 +124,7 @@ module.exports = new ButtonInterface({
             }
 
             let changeError = new p.embed().setDescription("I wasn't able to change their nickname.")
-            //user.setNickname(data.nickname.name.substring(0, 32)).catch(err => {return p.interaction.reply({ embeds: [changeError] })})
+            user.setNickname(data.nickname.name.substring(0, 32)).catch(err => {return p.interaction.reply({ embeds: [changeError] })})
 
             await deleteApplication(p, user, "nickname" ,data)
 
