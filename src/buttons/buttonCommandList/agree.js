@@ -24,8 +24,8 @@ module.exports = new ButtonInterface({
 
         try {
             if(Target.roles.highest.position < friend.position || Target.roles.highest.position < agree_to_rules.position) return p.interaction.reply({ embeds: [error], ephemeral: true })
-            setTimeout(() => {user.roles.remove(agree_to_rules)}, 5000)
-            user.roles.add(friend).then((user) => {
+            await user.roles.remove(agree_to_rules)
+            await user.roles.add(friend).then((user) => {
                 if(user.roles.cache.has(friend.id)) return p.interaction.reply({ embeds: [success], ephemeral: true })
                 else return p.interaction.reply({ embeds: [error], ephemeral: true })
             })

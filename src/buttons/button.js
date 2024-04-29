@@ -155,9 +155,9 @@ async function initButtons(main, dirComponent){
                 for(let address in dirComponent[key].address){
                     try{
                         address = dirComponent[key].address[address].split("/")
-                        let guild = await main.client.guilds.fetch(address[0])
-                        let channel = await guild.channels.fetch(address[1])
                         if(address[2]==msg && !checked[msg]){
+                            let guild = await main.client.guilds.fetch(address[0])
+                            let channel = await guild.channels.fetch(address[1])
                             let message = await channel.messages.fetch(msg)
                             checked[msg] = true
                             message.edit({components: toBeSent})
