@@ -85,6 +85,7 @@ class Command {
 }
 
 async function executeCommand(p){
+    console.log("Executing")
     await commandList[p.command].execute(p)
     if(!cdCache[p.msg.author.id+p.command]){
         let cooldown = 3000
@@ -325,7 +326,7 @@ function fixPerm(perms){
 
 async function checkDisabled(p){
     let data = await p.mongo.queryOne("command", p.msg.guildId)
-    let chnl = data.channel.indexOf((data?.channel?.filter(channels => channels._id == p.msg.channel.id))[0])
+    let chnl = data?.channel?.indexOf((data?.channel?.filter(channels => channels._id == p.msg.channel.id))[0])
     if(p.command == "Leveling" || p.command === "Automod") return (data?.channel[chnl]?.module?.includes(p.command) ? 1 : 0)
     return (data?.channel[chnl]?.commands?.includes(p.command) ? 1 : data?.disabled.includes(p.command) ? 2 : 0);
 }
