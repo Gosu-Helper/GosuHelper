@@ -85,7 +85,6 @@ class Command {
 }
 
 async function executeCommand(p){
-    console.log("Executing")
     await commandList[p.command].execute(p)
     if(!cdCache[p.msg.author.id+p.command]){
         let cooldown = 3000

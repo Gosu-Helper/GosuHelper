@@ -149,7 +149,7 @@ async function initButtons(main, dirComponent){
         }
 
         if(toBeSent.length > 5) toBeSent = toBeSent.slice(0, 5)
-        
+
         for(let key in dirComponent){
             if(dirComponent[key].address){
                 for(let address in dirComponent[key].address){
