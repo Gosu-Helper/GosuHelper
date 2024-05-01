@@ -31,7 +31,7 @@ module.exports = new ButtonInterface({
             })
         } catch(err){
             console.log(err)
-            return p.interaction.reply({ embeds: [error], ephemeral: true})
+            return p.interaction.reply({ embeds: [error], ephemeral: true })
         }
     }
 })
