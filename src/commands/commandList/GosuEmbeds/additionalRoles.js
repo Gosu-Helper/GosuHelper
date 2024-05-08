@@ -1,7 +1,7 @@
 const CommandInterface = require('../../commandInterface')
 
 module.exports = new CommandInterface({
-    alias: ['serverrolesmb', 'serverrolesembed', 'serveroleemb',, 'serveroleembed'],
+    alias: ['serverrolesemb', 'serverrolesembed', 'serveroleemb',, 'serveroleembed'],
     args: '(1|2|3)',
     desc: 'Additional Free Server Roles',
     related: [],

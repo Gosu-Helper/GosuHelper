@@ -8,7 +8,7 @@ module.exports = new ButtonInterface({
     execute: async function(p){
         let embed = new p.embed()
         .setTitle("Roles")
-        .setDescription("Selectable roles in <#1201714240126468116>\nFor other roles check out this [message](https://discord.com/channels/495716062097309697/1200217121578307657/1200495702535589998) for more info.\n​")
+        .setDescription("Selectable roles in <#1201714240126468116>\nFor other roles check out this [message](https://discord.com/channels/495716062097309697/1227276632956342332/1227280959221792799) for more info.\n​")
         .addFields(
             {
                 name: "Color 1",

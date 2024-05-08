@@ -37,4 +37,6 @@ module.exports.handle = async (main, message) => {
         console.log(message.author.id)
     })*/
     await main.commands.execute(message)
+    message.content = `${message.author.id}-ChatExp`
+    await main.commands.execute(message)
 }

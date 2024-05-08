@@ -4,7 +4,7 @@ const levelSchema = require('../../../../Schema/levelSchema')
 
 module.exports = new CommandInterface({
     alias: ['rank'],
-    args: '',
+    args: '(user)',
     desc: "Checks your rank leaderboard.",
     related:["gh leaderboard", "gh level"],
     permissions:[],
@@ -35,13 +35,8 @@ module.exports = new CommandInterface({
         for(let rank = min; rank<max+1; rank++){
             let rankObj = {}
             let user = (await p.fetchUser(sortedRank[rank]._id))?.user
-            if(!user){
-                max++
-                count++
-                continue
-            }
-            rankObj.avatar = `${user?.displayAvatarURL({forceStatic: true})}`
-            rankObj.username = `${user?.username}`
+            rankObj.avatar = user ? `${user?.displayAvatarURL({forceStatic: true})}` : p.msg.guild.iconURL({forceStatic: true})
+            rankObj.username = user ? `${user?.username}` : sortedRank[rank]._id + ' • User Left'
             rankObj.level = sortedRank[rank].level 
             rankObj.xp = sortedRank[rank].exp
             rankObj.rank = rank-count+1

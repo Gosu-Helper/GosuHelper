@@ -28,17 +28,12 @@ class Command {
         require('dotenv').config()
 
         let level = (require('../utils/permLevel')).permlevel(msg)
-        const levelParam = initParam(msg, "Leveling", "", "", this.main)
-
+        
         if(level < 2 && !(await checkDisabled(initParam(msg,"Automod", "", "", this.main)))){
             if(await commandList['automod'].execute(initParam(msg, "automod", "", "", this.main))) return
         }
-        let leveling = new levelClass(levelParam,msg)
-        let gain = await leveling.addExperience(levelParam, msg, true)
-        if(gain.leveledUp){
-            if(!(await checkDisabled(levelParam))) msg.channel.send({embeds: [new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setDescription(`Congratulations, you leveled up to Level ${(await gain).data.level+1}!`).setColor("RANDOM")]})
-            leveling.rewards(levelParam, msg.author, gain.data.level+1)
-        }
+
+        if(msg.content == `${msg.author.id}-ChatExp`) return chatExp(msg, this.main)
 
         let args = await checkPrefix(this.main, msg)
 
@@ -346,6 +341,44 @@ async function checkCd(p){
     if(cdCache[p.msg.author.id+p.command]){
         return cdCache[p.msg.author.id+p.command]
     } else return false
+}
+
+async function chatExp(msg, main){
+    const levelParam = initParam(msg, "Leveling", "", "", main)
+    let leveling = new levelClass(levelParam,msg)
+    let gain = await leveling.addExperience(levelParam, msg, true)
+    let rewards = await leveling.rewards(levelParam, msg.author, gain.data.level+1)
+    
+    let rewardText = ""
+
+    if(rewards.includes("Lv5")||rewards.includes("Lv15")||rewards.includes("Lv30")||rewards.includes("Lv50")||rewards.includes("Lv70")) rewardText += "You earned a level role, go pick a class under that level in <#1199891939642851378>!\n"
+    if(rewards.includes("Color 1")||rewards.includes("Color 2")||rewards.includes("Color 3")||rewards.includes("Color 4")) rewardText += "You earned a color role, go pick a color under that role in <#1201714240126468116>!\n"
+    if(rewards.includes("nick")) rewardText += "You can change your nickname now!\n"
+    if(rewards.includes("reactions")) rewardText += "You can add reactions to messages now!\n"
+    if(rewards.includes("attachments")) rewardText += "You can send pictures in <#496716663144579082> now!\n"
+
+    if(gain.leveledUp){
+        let levelUpEmbed = new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setDescription(`Congratulations, you leveled up to Level ${(await gain).data.level+1}!`).setColor("RANDOM")
+        let rewardsEmbed = new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setTitle("Level Up Rewards").setColor("RANDOM")
+        let embeds = [levelUpEmbed]
+
+        if(rewardText){
+            rewardsEmbed.setDescription(rewardText.slice(0,-1))
+            rewardsEmbed.addField('Rewards', rewards.join(", "))
+            embeds.push(rewardsEmbed)
+        }
+        if(!(await checkDisabled(levelParam))) msg.channel.send({embeds: embeds})
+    }else if(!gain.leveledUp){
+        let rewardsEmbed = new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setTitle("Missing Level Rewards").setColor("RANDOM")
+
+        if(rewards.length > 0){
+            if(rewardText){
+                rewardsEmbed.setDescription(rewardText.slice(0,-1))
+                rewardsEmbed.addField('Rewards', rewards.join(", "))
+            }
+            if(!(await checkDisabled(levelParam))) msg.channel.send({embeds: [rewardsEmbed]})
+        }
+    }
 }
 
 module.exports = Command

@@ -4,7 +4,7 @@ const levelSchema = require('../../../../Schema/levelSchema')
 
 module.exports = new CommandInterface({
     alias: ['leaderboard', 'lb'],
-    args: '(user)',
+    args: '(page)',
     desc: "Checks the leaderboard.",
     related:["gh rank", "gh level"],
     permissions:[],
@@ -20,18 +20,22 @@ module.exports = new CommandInterface({
         let sortedRank = await levelSchema.find({}).sort({level: -1, exp: -1})
         let userRank = await levelSchema.find({}).sort({level: -1, exp: -1}).then((sorted) => sorted.findIndex((user) => user._id == `${member?.id??p.msg.author.id}`))
 
+        let page = parseInt(p.args[0])-1 || 0
+
+        if(page>=sortedRank.length/10) page = 0
+
         let lbRank = []
         let count = 0
         for(let rank in sortedRank){
             if(count>9) break;
             let rankObj = {}
-            let user = (await p.fetchUser(sortedRank[rank]._id))?.user
-            if(!user) continue
-            rankObj.avatar = `${user?.displayAvatarURL({forceStatic: true})}`
-            rankObj.username = `${user?.username}`
-            rankObj.level = sortedRank[rank].level 
-            rankObj.xp = sortedRank[rank].exp
-            rankObj.rank = count+1
+            if(parseInt(rank)+1+page*10>sortedRank.length) break;
+            let user = (await p.fetchUser(sortedRank[parseInt(rank)+page*10]._id))?.user
+            rankObj.avatar = user ? `${user?.displayAvatarURL({forceStatic: true})}` : p.msg.guild.iconURL({forceStatic: true})
+            rankObj.username = user ? `${user?.username}` : sortedRank[parseInt(rank)+page*10]._id + ' • User Left'
+            rankObj.level = sortedRank[parseInt(rank)+page*10].level
+            rankObj.xp = sortedRank[parseInt(rank)+page*10].exp
+            rankObj.rank = page*10+count+1
             lbRank.push(rankObj)
             count++
         }
