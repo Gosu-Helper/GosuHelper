@@ -32,7 +32,7 @@ class Button {
         require('dotenv').config()
 
         let command = interaction.customId ?? null
-        
+
         if(!buttonCommandList[command]) return interaction.deferUpdate()
 
         let args = ''

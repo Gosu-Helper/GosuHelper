@@ -33,7 +33,7 @@ class Command {
             if(await commandList['automod'].execute(initParam(msg, "automod", "", "", this.main))) return
         }
 
-        if(msg.content == `${msg.author.id}-ChatExp`) return chatExp(msg, this.main)
+        if(msg.content == `${msg.author.id}-ChatExp`) return chatExp(msg, level, this.main)
 
         let args = await checkPrefix(this.main, msg)
 
@@ -343,11 +343,12 @@ async function checkCd(p){
     } else return false
 }
 
-async function chatExp(msg, main){
+async function chatExp(msg, level, main){
     const levelParam = initParam(msg, "Leveling", "", "", main)
     let leveling = new levelClass(levelParam,msg)
     let gain = await leveling.addExperience(levelParam, msg, true)
-    let rewards = await leveling.rewards(levelParam, msg.author, gain.data.level+1)
+    let rewards = [];
+    if(level<2) rewards = await leveling.rewards(levelParam, msg.author, gain.data.level+1)
     
     let rewardText = ""
 
@@ -365,13 +366,13 @@ async function chatExp(msg, main){
         if(rewardText){
             rewardsEmbed.setDescription(rewardText.slice(0,-1))
             rewardsEmbed.addField('Rewards', rewards.join(", "))
-            embeds.push(rewardsEmbed)
+            if(level<2) embeds.push(rewardsEmbed)
         }
         if(!(await checkDisabled(levelParam))) msg.channel.send({embeds: embeds})
     }else if(!gain.leveledUp){
         let rewardsEmbed = new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setTitle("Missing Level Rewards").setColor("RANDOM")
 
-        if(rewards.length > 0){
+        if(rewards.length > 0&&level<2){
             if(rewardText){
                 rewardsEmbed.setDescription(rewardText.slice(0,-1))
                 rewardsEmbed.addField('Rewards', rewards.join(", "))
