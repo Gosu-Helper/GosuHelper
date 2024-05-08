@@ -1,5 +1,5 @@
 const ButtonBuilder = require('../../buttonUtils/ButtonBuilder')
-    
+
 module.exports = {
     address: ['495716062097309697/1199891939642851378/1199893601115713597'],
     actionRow: {
