@@ -42,7 +42,7 @@ module.exports = async function debug(main, event){
                         if(userFilter[0]?.servers.includes(event.guild.id) || userFilter[0]?.servers.includes("all")) flag = 0
                     }else if(data.users.all === false){
                         flag = 0
-                        if(userFilter[0]?.servers.includes(event.guild.id) || userFilter[0].servers.includes("all")) flag = 1
+                        if(userFilter[0]?.servers.includes(event.guild.id) || userFilter[0]?.servers.includes("all")) flag = 1
                     }
                 }
             }
