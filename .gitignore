@@ -135,6 +135,7 @@ err.txt
 /src/buttons/buttonCommandList/instagram.js
 /src/buttonUtils/ButtonComponent.js
 /src/commands/commandList/Manager/listen.js
+/src/commands/commandList/Manager/json.js
 /src/commands/commandList/Economy
 /src/utils/param.js
 /src/data/gosuitems.js

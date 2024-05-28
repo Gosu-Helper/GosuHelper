@@ -1,10 +1,15 @@
 const {ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, ComponentType} = require('discord.js')
+const debug = require('../utils/debug')
 
 module.exports.handle = async (main, interaction) => {
     
     if(!interaction) console.log("Uh oh no interaction was found")
 
     if(!interaction.isButton()) return
+
+    let flag = await debug(main, interaction)
+
+    if(flag) return
 
     //inter.ephemeral = true
     const first = new ButtonBuilder().setLabel('confirm').setStyle(ButtonStyle.Primary).setCustomId('confirm')

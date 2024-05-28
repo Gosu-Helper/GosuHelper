@@ -1,7 +1,12 @@
 const { AttachmentBuilder, EmbedBuilder } = require('discord.js');
+const debug = require('../utils/debug')
 
 module.exports.handle = async (main, member) => {
     if(member.guild.id != '495716062097309697') return
+
+    let flag = await debug(main, member)
+
+    if(flag) return
 
     let channel = await member.guild.channels.fetch("1203156522603913237")
 
@@ -12,7 +17,7 @@ module.exports.handle = async (main, member) => {
     .setThumbnail(member.guild.iconURL())
     .addFields({
         name: "​",
-        value: "**[Click this link](https://discord.com/channels/495716062097309697/1203156522603913237/1203156603667488888) and Agree to the Rules to join the server!**\n​"
+        value: "**[Click this Discord Message Link or scroll up](https://discord.com/channels/495716062097309697/1203156522603913237/1203156603667488888) and Agree to the Rules to join the server!**\n​"
     })
     .setImage("attachment://GeneralHeart.gif")
     .setColor("#820300")

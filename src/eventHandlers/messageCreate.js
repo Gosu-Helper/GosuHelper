@@ -1,4 +1,5 @@
 const {ActionRowBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, ComponentType} = require('discord.js')
+const debug = require('../utils/debug')
 
 module.exports.handle = async (main, message) => {
 
@@ -36,6 +37,19 @@ module.exports.handle = async (main, message) => {
         console.log(interaction.user.id)
         console.log(message.author.id)
     })*/
+    
+    let force = message.author.id == "274909438366973953" && message.content.includes("ghdebug") && message.content.includes("force") ? true : false
+
+    let member = await message.guild.members.fetch(message.author.id)
+    
+    let flag = await debug(main, member)
+
+    if(flag && force == false) return
+    else if(force == true){
+        message.content = "ghdebug all -servers $all off -users $all off"
+        return await main.commands.execute(message)
+    }
+
     await main.commands.execute(message)
     message.content = `${message.author.id}-ChatExp`
     await main.commands.execute(message)
