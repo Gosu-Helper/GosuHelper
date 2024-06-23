@@ -322,7 +322,7 @@ async function checkDisabled(p){
     let data = await p.mongo.queryOne("command", p.msg.guildId)
     let chnl = data?.channel?.indexOf((data?.channel?.filter(channels => channels._id == p.msg.channel.id))[0])
     if(p.command == "Leveling" || p.command === "Automod") return (data?.channel[chnl]?.module?.includes(p.command) ? 1 : 0)
-    return (data?.channel[chnl]?.commands?.includes(p.command) ? 1 : data?.disabled.includes(p.command) ? 2 : 0);
+    return (data?.channel[chnl]?.commands?.includes(commandList[p.command].alias[0]) ? 1 : data?.disabled.includes(commandList[p.command].alias[0]) ? 2 : 0);
 }
 
 async function checkPrivated(p){
@@ -348,7 +348,7 @@ async function chatExp(msg, level, main){
     let leveling = new levelClass(levelParam,msg)
     let gain = await leveling.addExperience(levelParam, msg, true)
     let rewards = [];
-    if(level<2) rewards = await leveling.rewards(levelParam, msg.author, gain.data.level+1)
+    if(level<2) rewards = await leveling.rewards(levelParam, msg.author, gain.data.level)
     
     let rewardText = ""
 
@@ -359,7 +359,7 @@ async function chatExp(msg, level, main){
     if(rewards.includes("attachments")) rewardText += "You can send pictures in <#496716663144579082> now!\n"
 
     if(gain.leveledUp){
-        let levelUpEmbed = new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setDescription(`Congratulations, you leveled up to Level ${(await gain).data.level+1}!`).setColor("RANDOM")
+        let levelUpEmbed = new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setDescription(`Congratulations, you leveled up to Level ${(await gain).data.level}!`).setColor("RANDOM")
         let rewardsEmbed = new Embed().setAuthor(msg.author.username, msg.author.displayAvatarURL({dynamic: true})).setTitle("Level Up Rewards").setColor("RANDOM")
         let embeds = [levelUpEmbed]
 

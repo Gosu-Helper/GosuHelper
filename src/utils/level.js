@@ -58,9 +58,14 @@ module.exports = class Level{
         //If no data or data exists and doesn't include roleID add to saved roles
         if(!data) data = await p.mongo.createOne("level", { _id: msg.author.id, level: 0, exp: 0, lastSent: msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp})
 
+        let vip = false
+        let member = await p.fetchUser(p.msg.author.id)
+        if(member.roles.cache.has("797932385429487676") || member.roles.cache.has("832458135544266752") || member.roles.cache.has("585672404383039530")) vip = true
+
         if(((msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp)-data.lastSent) > 30000){
             let exp = Math.floor(Math.random() * (20-10+1) + 10)
             //console.log(exp)
+            exp = vip ? Math.round(exp * 1.2) : exp
             data.exp += exp
             data.lastSent = msg.createdTimestamp||this.msg.createdTimestamp||p.msg.createdTimestamp
         }
@@ -74,7 +79,7 @@ module.exports = class Level{
 
         if(levelup&&nextLevel) levelup = await this.addLevel(p, msg)
 
-        return {nextLevel, expDifference, data, leveledUp: levelup.nextLevel}
+        return {nextLevel, expDifference, data: (levelup && nextLevel) ? levelup.data : data, leveledUp: levelup.nextLevel}
     }
 
     async addLevel(p, msg){
@@ -233,6 +238,7 @@ module.exports = class Level{
 
                 resolve(rewardedRolesName);
             }
+            resolve([])
         }
     )}
 
